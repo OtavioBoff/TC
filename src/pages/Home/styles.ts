@@ -2,21 +2,28 @@ import styled, { css } from "styled-components";
 
 export const Container = styled.div`
   ${({ theme }) => css`
-    --tFirstChild: 40rem;
-    --tSecondChild: 40rem;
-    --tThirdChild: 8rem;
-    --tFourthChild: 8rem;
+    --tFirstChild: 40%;
+    --tSecondChild: 40%;
+    --tThirdChild: 10%;
+    --tFourthChild: 10%;
+
     display: flex;
     justify-content: center;
-    margin: auto;
+    flex-direction: column;
+    gap: 1rem;
+
+    width: 90%;
+    background: ${theme.gray600};
+    margin: 1rem;
+    padding: 2rem;
+    border-radius: 8px;
+
     table {
-      display: flex;
-      flex-direction: column;
       color: ${theme.gray100};
-      width: 90%;
+      width: 100%;
       border-collapse: collapse;
       caption {
-        display: block;
+        border: 1px solid white;
       }
       thead {
         color: inherit;
@@ -34,7 +41,8 @@ export const Container = styled.div`
             width: var(--tFourthChild);
           }
           th {
-            border: 1px solid white;
+            border-right: 1px solid white;
+            border-left: 1px solid white;
             text-decoration: none;
           }
         }
@@ -55,15 +63,56 @@ export const Container = styled.div`
             width: var(--tFourthChild);
           }
           td {
+            border-right: 1px solid white;
+            border-left: 1px solid white;
             input {
-              /* padding-left: 0.5rem;
-              align-content: center;
-              width: 100%;
               border: 0;
               background: transparent;
-              color: white; */
+              width: 100%;
+              padding-left: 0.5rem;
+              color: ${theme.white};
+              &:focus {
+                box-shadow: 1px 1px rgba(0, 0, 0, 0.2);
+                outline: 0;
+              }
+              &[type="number"] {
+                text-align: center;
+              }
             }
           }
+        }
+      }
+    }
+    footer {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+      gap: 0.5rem;
+      button {
+        border: 0;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        align-items: center;
+        padding: 0.25rem;
+      }
+      #add {
+        width: 100%;
+        color: ${theme.white};
+        background: ${theme.green500};
+        &:hover {
+          background: ${theme.green300};
+          color: ${theme.gray900};
+        }
+      }
+      #save {
+        width: 30%;
+        color: ${theme.white};
+        background: ${theme.green500};
+        &:hover {
+          background: ${theme.green300};
+          color: ${theme.gray900};
         }
       }
     }
