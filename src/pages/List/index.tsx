@@ -1,4 +1,4 @@
-import { ExerciseList } from "../../components/ExerciseList";
+import { ExerciseList } from "../../components/CreateTraining/ExerciseList";
 import { Container } from "./styles";
 
 export function List() {

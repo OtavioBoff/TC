@@ -18,7 +18,7 @@ export function Login() {
       </Link>
       <Link to="/" title="home">
         <button>
-          <span>Guess</span>
+          <span>Guest</span>
         </button>
       </Link>
     </Container>

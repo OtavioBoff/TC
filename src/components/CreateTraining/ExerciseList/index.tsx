@@ -1,5 +1,5 @@
-import { Container } from "././styles";
-import { MuscleList } from "../MuscleList";
+import { Container } from "./styles";
+import { MuscleList } from "./MuscleList";
 interface ExerciseGroupListProps {
   print?: boolean;
   exerciseGroup: "peitoral" | "perna";
