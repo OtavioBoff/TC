@@ -1,9 +1,11 @@
+import { ExerciseList } from "../../components/ExerciseList";
 import { Container } from "./styles";
 
 export function List() {
   return (
     <Container>
-      <p>sad</p>
+      <ExerciseList print={true} exerciseGroup="peitoral" />
+      <ExerciseList print={true} exerciseGroup="perna" />
     </Container>
   );
 }
