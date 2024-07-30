@@ -8,13 +8,13 @@ export function Register() {
         <input type="email" placeholder="Email" />
         <input type="password" placeholder="Senha" />
         <input type="password" placeholder="Senha" />
-        <Link to="/login" title="Login">
-          <button type="submit">Register</button>
+        <Link to="/login" title="Registrar">
+          <button type="submit">Registrar</button>
         </Link>
       </form>
-      <Link to="/login" title="Login">
+      <Link to="/login" title="Entrar">
         <button>
-          <span>Login</span>
+          <span>Entrar</span>
         </button>
       </Link>
     </Container>

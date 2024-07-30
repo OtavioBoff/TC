@@ -3,7 +3,6 @@ import { Container, Middle } from "../Main/styles";
 import { Tabel } from "../Table";
 
 export function CreateTraining() {
-  function handleAddTableRow() {}
   return (
     <Container>
       <button className="arrows">
@@ -12,9 +11,6 @@ export function CreateTraining() {
       <Middle>
         <Tabel />
         <footer>
-          <button type="submit" id="add" onClick={handleAddTableRow}>
-            Adicionar
-          </button>
           <button type="submit" id="save">
             Salvar
           </button>

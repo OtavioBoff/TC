@@ -9,7 +9,7 @@ export const Container = styled.div`
 
     width: 90%;
     background: ${theme.gray600};
-    margin: 1rem;
+    margin: auto;
     padding: 2rem;
     border-radius: 8px;
     .arrows {

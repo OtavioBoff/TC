@@ -7,18 +7,18 @@ export function Login() {
       <form action="">
         <input type="email" placeholder="Email" />
         <input type="password" placeholder="Senha" />
-        <Link to="/login" title="Login">
-          <button type="submit">Login</button>
+        <Link to="/login" title="Entrar">
+          <button type="submit">Entrar</button>
         </Link>
       </form>
-      <Link to="/register" title="Register">
+      <Link to="/register" title="Registrar">
         <button>
-          <span>Register</span>
+          <span>Registrar</span>
         </button>
       </Link>
       <Link to="/" title="home">
         <button>
-          <span>Guest</span>
+          <span>Convidado</span>
         </button>
       </Link>
     </Container>
