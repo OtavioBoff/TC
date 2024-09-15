@@ -1,17 +1,17 @@
 import { Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home/index";
-import { List } from "./pages/List/index";
 import { DefaultLayout } from "./layouts/DefaultLayout";
 import { LoginLayout } from "./layouts/LoginLayout";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
+import { NewWorkout } from "./pages/New-Workout";
 
 export function Router() {
   return (
     <Routes>
       <Route path="/" element={<DefaultLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/list" element={<List />} />
+        <Route path="/new-workout" element={<NewWorkout />} />
       </Route>
       <Route path="/" element={<LoginLayout />}>
         <Route path="/login" element={<Login />} />

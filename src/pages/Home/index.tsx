@@ -1,5 +1,5 @@
-import { CreateTraining } from "../../components/CreateTraining/Main";
+import { DisplayWorkout } from "./components/DisplayWorkout/Main";
 
 export function Home() {
-  return <CreateTraining />;
+  return <DisplayWorkout />;
 }

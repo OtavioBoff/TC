@@ -2,16 +2,17 @@ import styled, { css } from "styled-components";
 
 export const SidebarContainer = styled.header`
   ${({ theme }) => css`
-    width: 96px;
-    height: 100%;
+    height: 96px;
+    width: 100%;
     background: ${theme.gray900};
     display: flex;
+
     align-items: center;
     justify-content: center;
 
     nav {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
       gap: 0.5rem;
       a {
