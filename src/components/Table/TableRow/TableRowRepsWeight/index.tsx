@@ -1,12 +1,12 @@
 import { Workout } from "../../../../@types";
 
 export function generateTableRowsForRepsAndWeight(
-  i: number,
+  highestNumberOfSeriesInTheGroup: number,
   exerciseNum: number,
   workout: Workout[],
   pageNumber: number
 ) {
-  return Array.from({ length: i }, (_, index) => (
+  return Array.from({ length: highestNumberOfSeriesInTheGroup }, (_, index) => (
     <>
       <td>
         <span>

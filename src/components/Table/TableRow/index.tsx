@@ -4,11 +4,13 @@ import { Workout } from "../../../@types";
 interface GenerateTableRowsProps {
   workout: Workout[];
   pageNumber: number;
+  highestNumberOfSeriesInTheGroup: number;
 }
 
 export const generateTableRows = ({
   workout,
   pageNumber,
+  highestNumberOfSeriesInTheGroup,
 }: GenerateTableRowsProps) => {
   return Array.from(
     { length: workout[pageNumber]?.exercisesProps.length },
@@ -38,8 +40,7 @@ export const generateTableRows = ({
           </span>
         </td>
         {generateTableRowsForRepsAndWeight(
-          workout[pageNumber].exercisesProps[exerciseNumber]?.seriesProps.props
-            .length || 0,
+          highestNumberOfSeriesInTheGroup,
           exerciseNumber,
           workout,
           pageNumber

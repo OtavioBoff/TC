@@ -9,7 +9,7 @@ import { RegisterContext } from "./contexts/context";
 import { workoutTest } from "./test";
 
 export function App() {
-  const [workout, setWorkout] = useState<Workout[]>([]);
+  const [workout, setWorkout] = useState<Workout[]>(workoutTest);
   const [workouts, setWorkouts] = useState<Workout[][]>([workoutTest]);
   const [pageNumber, setPageNumber] = useState<number>(0);
   return (

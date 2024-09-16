@@ -8,6 +8,11 @@ export const Container = styled.div`
     width: 100%;
     height: 400px;
     overflow: auto;
+    span#pag {
+      width: 100%;
+      text-align: end;
+      padding-right: 64px;
+    }
   `}
 `;
 export const Middle = styled.div`

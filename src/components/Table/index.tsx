@@ -38,15 +38,12 @@ export function Table({
     if (pageNumber) setPageNumber(pageNumber - 1);
   }
 
-  function highestNumberOfSeriesInTheGroup() {
-    return workout[pageNumber]?.exercisesProps.reduce(
-      (max: number, exercise) => {
-        const numberOfSeries = exercise.seriesProps.props.length;
-        return numberOfSeries > max ? numberOfSeries : max;
-      },
-      0
-    );
-  }
+  const highestNumberOfSeriesInTheGroup = workout[
+    pageNumber
+  ]?.exercisesProps.reduce((max: number, exercise) => {
+    const numberOfSeries = exercise.seriesProps.props.length;
+    return numberOfSeries > max ? numberOfSeries : max;
+  }, 0);
 
   function NumberOfSeries(i: number) {
     return Array.from({ length: i }, () => (
@@ -63,7 +60,7 @@ export function Table({
 
   return (
     <Container>
-      <span>{`Página ${pageNumber + 1}`}</span>
+      <span id="pag">{`Página ${pageNumber + 1}`}</span>
       <Middle>
         <TableArrows onClick={handlePreviousPage}>
           <CaretLeft size={32} />
@@ -76,10 +73,16 @@ export function Table({
               <th>{exerciseWord}</th>
               <th>{observationWord}</th>
               <th>{seriesWord}</th>
-              {NumberOfSeries(highestNumberOfSeriesInTheGroup())}
+              {NumberOfSeries(highestNumberOfSeriesInTheGroup)}
             </tr>
           </thead>
-          <tbody>{generateTableRows({ workout, pageNumber })}</tbody>
+          <tbody>
+            {generateTableRows({
+              workout,
+              pageNumber,
+              highestNumberOfSeriesInTheGroup,
+            })}
+          </tbody>
         </table>
         <TableArrows onClick={handleNextPage}>
           <CaretRight size={32} />
