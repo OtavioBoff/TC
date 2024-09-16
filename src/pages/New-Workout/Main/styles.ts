@@ -8,6 +8,11 @@ export const Container = styled.div`
     width: 100%;
     background: ${theme.gray800};
     padding: 2rem;
+    footer {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+    }
   `}
 `;
 

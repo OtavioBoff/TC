@@ -1,11 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import { Home } from "./pages/Home/index";
+import { Home } from "./pages/Home/Main/index";
 import { DefaultLayout } from "./layouts/DefaultLayout";
 import { LoginLayout } from "./layouts/LoginLayout";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
-import { NewWorkout } from "./pages/New-Workout";
-
+import { NewWorkout } from "./pages/New-Workout/Main";
 export function Router() {
   return (
     <Routes>

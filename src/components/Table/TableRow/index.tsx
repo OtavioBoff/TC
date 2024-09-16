@@ -1,0 +1,50 @@
+import { generateTableRowsForRepsAndWeight } from "./TableRowRepsWeight";
+import { Workout } from "../../../@types";
+
+interface GenerateTableRowsProps {
+  workout: Workout[];
+  pageNumber: number;
+}
+
+export const generateTableRows = ({
+  workout,
+  pageNumber,
+}: GenerateTableRowsProps) => {
+  return Array.from(
+    { length: workout[pageNumber]?.exercisesProps.length },
+    (_, exerciseNumber) => (
+      <tr key={exerciseNumber}>
+        <td>
+          <span>
+            {workout[pageNumber].exercisesProps[exerciseNumber]?.muscle || "-"}
+          </span>
+        </td>
+        <td>
+          <span>
+            {workout[pageNumber].exercisesProps[exerciseNumber]?.exercise ||
+              "-"}
+          </span>
+        </td>
+        <td>
+          <span>
+            {workout[pageNumber].exercisesProps[exerciseNumber]?.observation ||
+              "-"}
+          </span>
+        </td>
+        <td>
+          <span>
+            {workout[pageNumber].exercisesProps[exerciseNumber]?.seriesProps
+              .props.length || "-"}
+          </span>
+        </td>
+        {generateTableRowsForRepsAndWeight(
+          workout[pageNumber].exercisesProps[exerciseNumber]?.seriesProps.props
+            .length || 0,
+          exerciseNumber,
+          workout,
+          pageNumber
+        )}
+      </tr>
+    )
+  );
+};

@@ -6,7 +6,7 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 50vh;
+    height: 400px;
     overflow: auto;
   `}
 `;
@@ -14,11 +14,10 @@ export const Middle = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: row;
-    gap: 2rem;
-    width: auto;
+    width: 100%;
     min-width: 80%;
     height: auto;
-    justify-content: center;
+    justify-content: space-between;
 
     table {
       color: ${theme.gray100};

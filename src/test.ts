@@ -1,4 +1,4 @@
-import { Workout } from "../../@types/styles";
+import { Workout } from "./@types";
 
 export const workoutTest: Workout[] = [
   {

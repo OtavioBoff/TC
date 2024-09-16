@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { BaseButton } from "../../CreateTraining/Main/styles";
+import { BaseButton } from "../../Main/styles";
 
 export const Container = styled.div`
   ${({ theme }) => css`
@@ -18,7 +18,7 @@ export const Container = styled.div`
 export const ExitButton = styled(BaseButton)`
   ${({ theme }) => css`
     position: absolute;
-    top: 10px;
+    top: 5px;
     right: 10px;
     border: 0;
     &:hover {
