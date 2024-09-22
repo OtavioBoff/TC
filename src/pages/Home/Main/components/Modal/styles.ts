@@ -1,10 +1,10 @@
 import styled, { css } from "styled-components";
-import { BaseButton } from "../../Main/styles";
+import { BaseButton } from "../../../../New-Workout/Main/styles";
 
 export const Container = styled.div`
   ${({ theme }) => css`
     background: ${theme.gray600};
-    width: 60%;
+    width: 90%;
     height: 60vh;
     position: absolute;
     border-radius: 8px;

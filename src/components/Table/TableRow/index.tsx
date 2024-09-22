@@ -3,39 +3,38 @@ import { Workout } from "../../../@types";
 
 interface GenerateTableRowsProps {
   workout: Workout[];
-  pageNumber: number;
+  pageIndex: number;
   highestNumberOfSeriesInTheGroup: number;
 }
 
 export const generateTableRows = ({
   workout,
-  pageNumber,
+  pageIndex,
   highestNumberOfSeriesInTheGroup,
 }: GenerateTableRowsProps) => {
   return Array.from(
-    { length: workout[pageNumber]?.exercisesProps.length },
+    { length: workout[pageIndex]?.exercisesProps.length },
     (_, exerciseNumber) => (
       <tr key={exerciseNumber}>
         <td>
           <span>
-            {workout[pageNumber].exercisesProps[exerciseNumber]?.muscle || "-"}
+            {workout[pageIndex].exercisesProps[exerciseNumber]?.muscle || "-"}
           </span>
         </td>
         <td>
           <span>
-            {workout[pageNumber].exercisesProps[exerciseNumber]?.exercise ||
+            {workout[pageIndex].exercisesProps[exerciseNumber]?.exercise || "-"}
+          </span>
+        </td>
+        <td>
+          <span>
+            {workout[pageIndex].exercisesProps[exerciseNumber]?.observation ||
               "-"}
           </span>
         </td>
         <td>
           <span>
-            {workout[pageNumber].exercisesProps[exerciseNumber]?.observation ||
-              "-"}
-          </span>
-        </td>
-        <td>
-          <span>
-            {workout[pageNumber].exercisesProps[exerciseNumber]?.seriesProps
+            {workout[pageIndex].exercisesProps[exerciseNumber]?.seriesProps
               .props.length || "-"}
           </span>
         </td>
@@ -43,7 +42,7 @@ export const generateTableRows = ({
           highestNumberOfSeriesInTheGroup,
           exerciseNumber,
           workout,
-          pageNumber
+          pageIndex
         )}
       </tr>
     )

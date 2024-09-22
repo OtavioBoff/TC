@@ -2,10 +2,10 @@ import { useContext, useEffect } from "react";
 import { Container, Middle, TableArrows } from "./styles";
 import { CaretLeft, CaretRight } from "phosphor-react";
 import { generateTableRows } from "./TableRow";
-import { RegisterContext } from "../../contexts/context";
+import { RegisterWorkoutContext } from "../../contexts/workoutContext";
 
 export interface TableProps {
-  currentPageNumber?: (pageNumber: number) => void;
+  currentPageNumber?: (pageIndex: number) => void;
   nextNewPage?: () => void;
   muscleWord?: string;
   exerciseWord?: string;
@@ -25,21 +25,23 @@ export function Table({
   repsWord = "Reps",
   weightWord = "Peso",
 }: TableProps) {
-  const { workout, pageNumber, setPageNumber } = useContext(RegisterContext);
+  const { workout, pageIndex, setPageIndex } = useContext(
+    RegisterWorkoutContext
+  );
 
   function handleNextPage() {
     const numberOfGroups = workout.length - 1;
-    if (numberOfGroups > pageNumber && !(workout[pageNumber].group == ""))
-      setPageNumber(pageNumber + 1);
-    if (pageNumber == numberOfGroups && nextNewPage) nextNewPage();
+    if (numberOfGroups > pageIndex && !(workout[pageIndex].group == ""))
+      setPageIndex(pageIndex + 1);
+    if (pageIndex == numberOfGroups && nextNewPage) nextNewPage();
   }
 
   function handlePreviousPage() {
-    if (pageNumber) setPageNumber(pageNumber - 1);
+    if (pageIndex) setPageIndex(pageIndex - 1);
   }
 
   const highestNumberOfSeriesInTheGroup = workout[
-    pageNumber
+    pageIndex
   ]?.exercisesProps.reduce((max: number, exercise) => {
     const numberOfSeries = exercise.seriesProps.props.length;
     return numberOfSeries > max ? numberOfSeries : max;
@@ -55,18 +57,18 @@ export function Table({
   }
 
   useEffect(() => {
-    if (currentPageNumber) currentPageNumber(pageNumber);
-  }, [pageNumber, workout, currentPageNumber]);
+    if (currentPageNumber) currentPageNumber(pageIndex);
+  }, [pageIndex, workout, currentPageNumber]);
 
   return (
     <Container>
-      <span id="pag">{`Página ${pageNumber + 1}`}</span>
+      <span id="pag">{`Página ${pageIndex + 1}`}</span>
       <Middle>
         <TableArrows onClick={handlePreviousPage}>
           <CaretLeft size={32} />
         </TableArrows>
         <table>
-          <caption>{workout[pageNumber]?.group}</caption>
+          <caption>{workout[pageIndex]?.group}</caption>
           <thead>
             <tr>
               <th>{muscleWord}</th>
@@ -79,7 +81,7 @@ export function Table({
           <tbody>
             {generateTableRows({
               workout,
-              pageNumber,
+              pageIndex,
               highestNumberOfSeriesInTheGroup,
             })}
           </tbody>

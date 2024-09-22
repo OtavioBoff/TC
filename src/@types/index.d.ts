@@ -10,6 +10,11 @@ declare module "style-components" {
 
 export type WorkoutType = typeof Workout;
 
+export interface Workouts {
+  name: string;
+  workout: Workout[];
+}
+
 export interface Workout {
   group: string;
   exercisesProps: ExercisesProps[];

@@ -5,6 +5,7 @@ import { LoginLayout } from "./layouts/LoginLayout";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { NewWorkout } from "./pages/New-Workout/Main";
+
 export function Router() {
   return (
     <Routes>

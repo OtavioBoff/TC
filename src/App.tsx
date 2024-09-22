@@ -4,21 +4,25 @@ import { BrowserRouter } from "react-router-dom";
 import { Router } from "./Router";
 import { GlobalStyle } from "./styles/global";
 import { useState } from "react";
-import { Workout } from "./@types";
-import { RegisterContext } from "./contexts/context";
+import { Workout, Workouts } from "./@types";
+import { RegisterWorkoutContext } from "./contexts/workoutContext";
 import { workoutTest } from "./test";
 
 export function App() {
-  const [workout, setWorkout] = useState<Workout[]>(workoutTest);
-  const [workouts, setWorkouts] = useState<Workout[][]>([workoutTest]);
-  const [pageNumber, setPageNumber] = useState<number>(0);
+  const [workout, setWorkout] = useState<Workout[]>([]);
+  const [workouts, setWorkouts] = useState<Workouts[]>([
+    workoutTest,
+    workoutTest,
+    workoutTest,
+  ]);
+  const [pageIndex, setPageIndex] = useState<number>(0);
   return (
-    <RegisterContext.Provider
+    <RegisterWorkoutContext.Provider
       value={{
         workout,
         setWorkout,
-        pageNumber,
-        setPageNumber,
+        pageIndex,
+        setPageIndex,
         workouts,
         setWorkouts,
       }}
@@ -29,6 +33,6 @@ export function App() {
           <GlobalStyle />
         </BrowserRouter>
       </ThemeProvider>
-    </RegisterContext.Provider>
+    </RegisterWorkoutContext.Provider>
   );
 }

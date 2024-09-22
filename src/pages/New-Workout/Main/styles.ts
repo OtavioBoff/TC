@@ -65,19 +65,16 @@ export const InputsBox = styled.div`
 `;
 export const Input = styled.input`
   ${({ theme }) => css`
-    width: 20%;
     border: 0;
-    background: transparent;
-    width: 100%;
-    padding-left: 0.5rem;
-    color: ${theme.white};
-    text-align: center;
+    background: #ccc;
+    border-radius: 8px;
+    color: ${theme.gray800};
     box-shadow: 1px 1px rgba(0, 0, 0, 0.2);
-    &:focus {
-      outline: 0;
-    }
-    &[type="number"] {
-      text-align: center;
-    }
+    width: 100%;
+    overflow: hidden;
+    resize: none;
+    text-align: center;
+    padding: 12px;
+    font-size: 24px;
   `}
 `;

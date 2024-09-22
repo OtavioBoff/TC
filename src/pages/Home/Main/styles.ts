@@ -7,5 +7,7 @@ export const Container = styled.div`
     width: 100%;
     background: ${theme.gray800};
     padding: 2rem;
+    flex-direction: column;
+    gap: 2rem;
   `}
 `;

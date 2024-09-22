@@ -1,22 +1,26 @@
-import { useContext, useState } from "react";
+// import { useContext, useState } from "react";
 import { InputForm, NewExerciseForm } from "../components/InputForm";
 import { AddButton, Container, SubmitButton } from "./styles";
 import { Table } from "../../../components/Table";
 import { Plus } from "phosphor-react";
 import { Modal } from "../components/Modal";
-import { RegisterContext } from "../../../contexts/context";
+
+import { useContext, useState } from "react";
+import { WorkoutNameData, WorkoutNameForm } from "../components/WorkNameForm";
+import { RegisterWorkoutContext } from "../../../contexts/workoutContext";
 
 export function NewWorkout() {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [pageNumber, setPageNumber] = useState(0);
-
-  const { workout, setWorkout } = useContext(RegisterContext);
+  const [workoutName, setWorkoutName] = useState("");
+  const { workout, setWorkout, pageIndex, setPageIndex } = useContext(
+    RegisterWorkoutContext
+  );
 
   const openModal = () => setIsModalVisible(true);
 
   const closeModal = () => setIsModalVisible(false);
 
-  const newGroup: boolean = !workout[pageNumber]?.group;
+  const newGroup: boolean = !workout[pageIndex]?.group;
 
   const handleSubmit = (data: NewExerciseForm) => {
     data.exerciseProps.seriesProps.props.splice(
@@ -45,7 +49,7 @@ export function NewWorkout() {
         exercisesProps: [newExercise],
       });
     } else {
-      const group = updatedWorkout[pageNumber];
+      const group = updatedWorkout[pageIndex];
       if (group.exercisesProps.length === 0) {
         group.group = data.group ?? "";
       }
@@ -57,7 +61,7 @@ export function NewWorkout() {
   };
 
   const currentPageNumber = (data: number) => {
-    setPageNumber(data);
+    setPageIndex(data);
 
     if (data === workout.length - 1) {
       handleNewPage();
@@ -72,9 +76,21 @@ export function NewWorkout() {
     setWorkout([...workout, newGroup]);
   };
 
-  const handleSubmitWorkout = () => {
-    console.log(workout);
+  const handleNewWorkout = () => {
+    setWorkoutName("");
+    openModal();
   };
+
+  const handleWorkoutName = () => {
+    setWorkoutName(" ");
+    openModal();
+  };
+  const handleSubmitWorkout = (data: WorkoutNameData) => {
+    console.log(data);
+    console.log(workout);
+    closeModal();
+  };
+  const isDisableSubmitButton: boolean = !workout[0]?.group ? true : false;
 
   return (
     <Container>
@@ -84,14 +100,23 @@ export function NewWorkout() {
       />
 
       <Modal isVisible={isModalVisible} onClose={closeModal}>
-        <InputForm onSubmit={handleSubmit} newGroup={newGroup} />
+        {workoutName ? (
+          <WorkoutNameForm onSubmit={handleSubmitWorkout} />
+        ) : (
+          <InputForm onSubmit={handleSubmit} newGroup={newGroup} />
+        )}
       </Modal>
 
       <footer>
-        <AddButton onClick={openModal}>
+        <AddButton onClick={handleNewWorkout}>
           <Plus size={20} />
         </AddButton>
-        <SubmitButton onClick={handleSubmitWorkout}>Submit</SubmitButton>
+        <SubmitButton
+          disabled={isDisableSubmitButton}
+          onClick={handleWorkoutName}
+        >
+          Submit
+        </SubmitButton>
       </footer>
     </Container>
   );
