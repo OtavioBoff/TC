@@ -1,17 +1,13 @@
 import { useForm } from "react-hook-form";
 import { FormContainer, Input, SubmitButton } from "./styles";
-
-export interface WorkoutNameData {
-  name: string;
-}
+import { Workouts } from "../../../../@types";
 
 interface WorkoutNameFormProps {
-  onSubmit: (data: WorkoutNameData) => void;
+  onSubmit: ({ name }: Workouts) => void;
 }
 
 export function WorkoutNameForm({ onSubmit }: WorkoutNameFormProps) {
-  const workoutName = useForm<WorkoutNameData>();
-  const { handleSubmit, register } = workoutName;
+  const { handleSubmit, register } = useForm<Workouts>();
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <Input

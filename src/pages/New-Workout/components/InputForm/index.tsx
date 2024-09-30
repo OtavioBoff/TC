@@ -10,17 +10,31 @@ import {
 } from "./styles";
 import { ExercisesProps } from "../../../../@types";
 import { useFieldArray, useForm } from "react-hook-form";
+import { useContext } from "react";
+import { RegisterWorkoutContext } from "../../../../contexts/workoutContext";
 
 export interface NewExerciseForm {
   exerciseProps: ExercisesProps;
   group?: string;
 }
+
 interface InputFormProps {
   onSubmit: (data: NewExerciseForm) => void;
   newGroup: boolean;
+  toEdit: boolean;
+  numberOfExerciseToEdit: number;
 }
-export function InputForm({ onSubmit, newGroup }: InputFormProps) {
+
+export function InputForm({
+  onSubmit,
+  newGroup,
+  toEdit,
+  numberOfExerciseToEdit,
+}: InputFormProps) {
+  const { workout, pageIndex } = useContext(RegisterWorkoutContext);
+
   const newRowForm = useForm<NewExerciseForm>({});
+
   const { register, handleSubmit, watch, control } = newRowForm;
 
   useFieldArray({
@@ -42,6 +56,12 @@ export function InputForm({ onSubmit, newGroup }: InputFormProps) {
             {...register(`exerciseProps.seriesProps.props.${index}.reps`, {
               valueAsNumber: true,
             })}
+            defaultValue={
+              toEdit
+                ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                    .seriesProps?.props[index]?.reps
+                : 0
+            }
           />
         </InputsBox>
         <InputsBox>
@@ -52,6 +72,12 @@ export function InputForm({ onSubmit, newGroup }: InputFormProps) {
             {...register(`exerciseProps.seriesProps.props.${index}.weight`, {
               valueAsNumber: true,
             })}
+            defaultValue={
+              toEdit
+                ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                    .seriesProps?.props[index]?.weight
+                : 0
+            }
           />
         </InputsBox>
       </div>
@@ -66,6 +92,7 @@ export function InputForm({ onSubmit, newGroup }: InputFormProps) {
             placeholder="nome"
             id="group-name"
             {...register("group", { required: true })}
+            defaultValue={toEdit ? workout[pageIndex].group : ""}
           />
         </InputsBox>
       )}
@@ -76,6 +103,12 @@ export function InputForm({ onSubmit, newGroup }: InputFormProps) {
             <TextInput
               placeholder="muscle"
               {...register("exerciseProps.muscle")}
+              defaultValue={
+                toEdit
+                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                      .muscle
+                  : ""
+              }
             />
           </InputsBox>
           <InputsBox>
@@ -83,6 +116,12 @@ export function InputForm({ onSubmit, newGroup }: InputFormProps) {
             <TextInput
               placeholder="exercise"
               {...register("exerciseProps.exercise")}
+              defaultValue={
+                toEdit
+                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                      .exercise
+                  : ""
+              }
             />
           </InputsBox>
           <InputsBox>
@@ -90,6 +129,12 @@ export function InputForm({ onSubmit, newGroup }: InputFormProps) {
             <TextAreaInput
               placeholder="description"
               {...register("exerciseProps.observation")}
+              defaultValue={
+                toEdit
+                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                      .observation
+                  : ""
+              }
             />
           </InputsBox>
           <InputsBox>
@@ -103,6 +148,12 @@ export function InputForm({ onSubmit, newGroup }: InputFormProps) {
               {...register("exerciseProps.seriesProps.num", {
                 valueAsNumber: true,
               })}
+              defaultValue={
+                toEdit
+                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                      .seriesProps.num
+                  : 0
+              }
             />
           </InputsBox>
         </InputsContainer>

@@ -2,25 +2,34 @@
 import { InputForm, NewExerciseForm } from "../components/InputForm";
 import { AddButton, Container, SubmitButton } from "./styles";
 import { Table } from "../../../components/Table";
-import { Plus } from "phosphor-react";
-import { Modal } from "../components/Modal";
+import { Modal } from "../../../components/Modal";
 
 import { useContext, useState } from "react";
-import { WorkoutNameData, WorkoutNameForm } from "../components/WorkNameForm";
+import { WorkoutNameForm } from "../components/WorkNameForm";
 import { RegisterWorkoutContext } from "../../../contexts/workoutContext";
+import { Workouts } from "../../../@types";
+import { BiPlus } from "react-icons/bi";
 
 export function NewWorkout() {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [workoutName, setWorkoutName] = useState("");
-  const { workout, setWorkout, pageIndex, setPageIndex } = useContext(
+  const { workout, setWorkout, workouts, pageIndex, setPageIndex } = useContext(
     RegisterWorkoutContext
   );
+
+  const [workoutName, setWorkoutName] = useState("");
+
+  const newGroup: boolean = !workout[pageIndex]?.group;
+
+  const isDisableSubmitButton: boolean = !workout[0]?.group ? true : false;
+
+  const [isEdited, setIsEdited] = useState(false);
+
+  const [numberOfExerciseToEdit, setNumberOfExerciseToEdit] = useState(0);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const openModal = () => setIsModalVisible(true);
 
   const closeModal = () => setIsModalVisible(false);
-
-  const newGroup: boolean = !workout[pageIndex]?.group;
 
   const handleSubmit = (data: NewExerciseForm) => {
     data.exerciseProps.seriesProps.props.splice(
@@ -41,8 +50,6 @@ export function NewWorkout() {
 
     const updatedWorkout = [...workout];
 
-    console.log(updatedWorkout);
-
     if (updatedWorkout.length === 0) {
       updatedWorkout.push({
         group: data.group ?? "",
@@ -53,8 +60,17 @@ export function NewWorkout() {
       if (group.exercisesProps.length === 0) {
         group.group = data.group ?? "";
       }
-      group.exercisesProps.push(newExercise);
+
+      if (isEdited) {
+        group.exercisesProps = group.exercisesProps.map((exercise, index) => {
+          return index !== numberOfExerciseToEdit ? exercise : newExercise;
+        });
+        setIsEdited(false);
+      } else {
+        group.exercisesProps.push(newExercise);
+      }
     }
+
     setWorkout(updatedWorkout);
 
     closeModal();
@@ -85,31 +101,53 @@ export function NewWorkout() {
     setWorkoutName(" ");
     openModal();
   };
-  const handleSubmitWorkout = (data: WorkoutNameData) => {
-    console.log(data);
-    console.log(workout);
+
+  const handleSubmitWorkout = ({ name }: Workouts) => {
+    const numberOfWorkouts = workout.reduce(
+      (max: number, _, index, workouts) => {
+        return workouts[index].group != "" ? max + 1 : max;
+      },
+      0
+    );
+    workout.splice(numberOfWorkouts, workout.length - numberOfWorkouts);
+    const newWorkout: Workouts = { name: name, workout: workout };
+    workouts.push(newWorkout);
+    console.log(workouts);
+    setWorkout([]);
     closeModal();
   };
-  const isDisableSubmitButton: boolean = !workout[0]?.group ? true : false;
+
+  const onEditExercise = (exerciseNumber: number) => {
+    setIsEdited(true);
+    setNumberOfExerciseToEdit(exerciseNumber);
+    openModal();
+  };
 
   return (
     <Container>
       <Table
         currentPageNumber={currentPageNumber}
         nextNewPage={handleNewPage}
+        isEditable={true}
+        OnEditExercise={onEditExercise}
       />
 
       <Modal isVisible={isModalVisible} onClose={closeModal}>
         {workoutName ? (
           <WorkoutNameForm onSubmit={handleSubmitWorkout} />
         ) : (
-          <InputForm onSubmit={handleSubmit} newGroup={newGroup} />
+          <InputForm
+            onSubmit={handleSubmit}
+            newGroup={newGroup}
+            toEdit={isEdited}
+            numberOfExerciseToEdit={numberOfExerciseToEdit}
+          />
         )}
       </Modal>
 
       <footer>
         <AddButton onClick={handleNewWorkout}>
-          <Plus size={20} />
+          <BiPlus size={20} />
         </AddButton>
         <SubmitButton
           disabled={isDisableSubmitButton}

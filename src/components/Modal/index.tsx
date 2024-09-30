@@ -1,6 +1,6 @@
 import React from "react";
-import { Container, ExitButton } from "./styles";
-import { X } from "phosphor-react";
+import { Container, Content, ExitButton } from "./styles";
+import { PiX } from "react-icons/pi";
 
 interface ModalProps {
   isVisible: boolean;
@@ -13,10 +13,12 @@ export function Modal({ isVisible, onClose, children }: ModalProps) {
 
   return (
     <Container>
-      <ExitButton onClick={onClose}>
-        <X size={24} />
-      </ExitButton>
-      {children}
+      <Content>
+        <ExitButton onClick={onClose}>
+          <PiX size={24} />
+        </ExitButton>
+        {children}
+      </Content>
     </Container>
   );
 }

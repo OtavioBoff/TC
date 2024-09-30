@@ -1,99 +1,72 @@
 import styled, { css } from "styled-components";
 
 export const Container = styled.div`
-  ${() => css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: 400px;
-    overflow: auto;
-    span#pag {
-      width: 100%;
-      text-align: end;
-      padding-right: 64px;
-    }
-  `}
-`;
-export const Middle = styled.div`
   ${({ theme }) => css`
     display: flex;
-    flex-direction: row;
     width: 100%;
-    min-width: 80%;
     height: auto;
+    overflow: auto;
     justify-content: space-between;
-
     table {
-      color: ${theme.gray100};
+      width: 100%;
       border-collapse: collapse;
-
+      color: ${theme.gray100};
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 1rem 0;
+      background-color: ${theme.gray600};
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
       caption {
-        font-size: 1.25rem;
+        div {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          padding-bottom: 8px;
+        }
+        width: 100%;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: ${theme.gray100};
       }
-
       thead {
-        color: inherit;
-
+        background-color: ${theme.gray600};
+        color: ${theme.gray100};
         tr {
           th {
-            padding: 0.25rem 0.5rem;
-            border: 1px solid ${theme.gray100};
-            text-decoration: none;
-
-            &:nth-child(1) {
-              width: 15%;
-            }
-            &:nth-child(2) {
-              width: 25%;
-            }
-            &:nth-child(3) {
-              /* width: 20%; */
-            }
+            padding: 0.75rem 1rem;
+            border: none;
+            font-size: 1rem;
+            text-transform: uppercase;
           }
         }
       }
-
       tbody {
-        color: inherit;
-
         tr {
+          transition: background-color 0.1s ease;
           td {
-            text-align: center;
-            border-right: 1px solid ${theme.gray100};
-            border-left: 1px solid ${theme.gray100};
+            padding: 0.75rem 1rem;
+            border-top: 1px solid ${theme.gray300};
+            border-bottom: 1px solid ${theme.gray300};
 
-            &:nth-child(1) {
-              width: 10%;
+            &:first-child {
+              border-left: none;
             }
-            &:nth-child(2) {
-              width: 25%;
-            }
-            &:nth-child(3) {
-              /* width: 20%; */
+
+            &:last-child {
+              border-right: none;
             }
           }
-        }
-
-        &:last-child {
-          border-bottom: 2px solid ${theme.gray100};
+          &:hover {
+            color: ${theme.white};
+            background-color: ${theme.gray500};
+          }
         }
       }
-    }
-
-    button {
-      background: transparent;
-      align-items: center;
-      border: 0;
-      padding: 0;
-      color: ${theme.gray300};
-
-      &:focus {
-        outline: 0;
-      }
-
-      &:hover {
-        color: ${theme.green500};
+      tbody tr:last-child {
+        td {
+          border-bottom: none;
+        }
       }
     }
   `}
@@ -103,13 +76,48 @@ export const TableArrows = styled.button`
     border: 0;
     margin: 1rem;
     background: transparent;
-    height: 100%;
     color: ${theme.white};
     text-align: center;
+    align-items: center;
     display: flex;
     justify-content: center;
+    flex-grow: 1;
     &:hover {
       color: ${theme.green500};
+    }
+  `}
+`;
+export const PageNumber = styled.span`
+  ${({ theme }) => css`
+    color: ${theme.gray100};
+    text-align: center;
+    font-size: 1rem;
+  `}
+`;
+
+const baseButton = styled.button`
+  ${({ theme }) => css`
+    color: ${theme.gray300};
+    background: transparent;
+    border: 0;
+    align-content: center;
+    &:hover {
+      box-shadow: "0 0 0 2px white";
+    }
+  `}
+`;
+
+export const EditButton = styled(baseButton)`
+  ${({ theme }) => css`
+    &:hover {
+      color: ${theme.green500};
+    }
+  `}
+`;
+export const RemoveButton = styled(baseButton)`
+  ${({ theme }) => css`
+    &:hover {
+      color: ${theme.red500};
     }
   `}
 `;

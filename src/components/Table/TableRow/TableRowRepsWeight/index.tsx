@@ -1,3 +1,4 @@
+import React from "react";
 import { Workout } from "../../../../@types";
 
 export function generateTableRowsForRepsAndWeight(
@@ -7,7 +8,7 @@ export function generateTableRowsForRepsAndWeight(
   pageIndex: number
 ) {
   return Array.from({ length: highestNumberOfSeriesInTheGroup }, (_, index) => (
-    <>
+    <React.Fragment key={index}>
       <td>
         <span>
           {workout[pageIndex].exercisesProps[exerciseNum]?.seriesProps.props[
@@ -24,6 +25,6 @@ export function generateTableRowsForRepsAndWeight(
             : "-"}
         </span>
       </td>
-    </>
+    </React.Fragment>
   ));
 }

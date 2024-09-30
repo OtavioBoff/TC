@@ -1,21 +1,38 @@
 import styled, { css } from "styled-components";
-import { BaseButton } from "../../Main/styles";
+import { BaseButton } from "../../pages/New-Workout/Main/styles";
 
 export const Container = styled.div`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Content = styled.div`
   ${({ theme }) => css`
-    background: ${theme.gray600};
-    width: 60%;
-    height: 60vh;
-    position: absolute;
+    position: relative;
+
     border-radius: 8px;
+    background: ${theme.gray700};
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+
+    width: 90%;
+    min-height: 50vh;
+    max-height: 90vh;
+
     padding: 2rem;
   `}
 `;
+
 export const ExitButton = styled(BaseButton)`
   ${({ theme }) => css`
     position: absolute;

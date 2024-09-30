@@ -1,12 +1,15 @@
-import { useContext, useEffect } from "react";
-import { Container, Middle, TableArrows } from "./styles";
-import { CaretLeft, CaretRight } from "phosphor-react";
+import React, { useContext, useEffect } from "react";
+import { Container, PageNumber, TableArrows } from "./styles";
 import { generateTableRows } from "./TableRow";
 import { RegisterWorkoutContext } from "../../contexts/workoutContext";
+import { PiCaretLeft, PiCaretRight } from "react-icons/pi";
 
 export interface TableProps {
+  isEditable?: boolean;
   currentPageNumber?: (pageIndex: number) => void;
+  OnEditExercise?: (exerciseNumber: number) => void;
   nextNewPage?: () => void;
+  editRemoveWord?: string;
   muscleWord?: string;
   exerciseWord?: string;
   observationWord?: string;
@@ -16,8 +19,11 @@ export interface TableProps {
 }
 
 export function Table({
+  isEditable = false,
   nextNewPage,
+  OnEditExercise,
   currentPageNumber,
+  editRemoveWord = "Editar\n\nExcluir",
   muscleWord = "Músculo",
   exerciseWord = "Exercícios",
   observationWord = "Observações",
@@ -25,7 +31,7 @@ export function Table({
   repsWord = "Reps",
   weightWord = "Peso",
 }: TableProps) {
-  const { workout, pageIndex, setPageIndex } = useContext(
+  const { workout, setWorkout, pageIndex, setPageIndex } = useContext(
     RegisterWorkoutContext
   );
 
@@ -48,11 +54,11 @@ export function Table({
   }, 0);
 
   function NumberOfSeries(i: number) {
-    return Array.from({ length: i }, () => (
-      <>
+    return Array.from({ length: i }, (_, index) => (
+      <React.Fragment key={index}>
         <th>{repsWord}</th>
         <th>{weightWord}</th>
-      </>
+      </React.Fragment>
     ));
   }
 
@@ -60,36 +66,69 @@ export function Table({
     if (currentPageNumber) currentPageNumber(pageIndex);
   }, [pageIndex, workout, currentPageNumber]);
 
+  function onEditExercise(exerciseNumber: number) {
+    OnEditExercise?.(exerciseNumber);
+  }
+
+  function removeExercise(exerciseNumber: number) {
+    const updatedWorkouts = [...workout];
+
+    const currentExercises = [...updatedWorkouts[pageIndex].exercisesProps];
+
+    currentExercises.splice(exerciseNumber, 1);
+
+    updatedWorkouts[pageIndex] = {
+      ...updatedWorkouts[pageIndex],
+      exercisesProps: currentExercises,
+    };
+
+    setWorkout(updatedWorkouts);
+  }
+
   return (
     <Container>
-      <span id="pag">{`Página ${pageIndex + 1}`}</span>
-      <Middle>
-        <TableArrows onClick={handlePreviousPage}>
-          <CaretLeft size={32} />
-        </TableArrows>
-        <table>
-          <caption>{workout[pageIndex]?.group}</caption>
-          <thead>
-            <tr>
-              <th>{muscleWord}</th>
-              <th>{exerciseWord}</th>
-              <th>{observationWord}</th>
-              <th>{seriesWord}</th>
-              {NumberOfSeries(highestNumberOfSeriesInTheGroup)}
-            </tr>
-          </thead>
-          <tbody>
-            {generateTableRows({
-              workout,
-              pageIndex,
-              highestNumberOfSeriesInTheGroup,
-            })}
-          </tbody>
-        </table>
-        <TableArrows onClick={handleNextPage}>
-          <CaretRight size={32} />
-        </TableArrows>
-      </Middle>
+      <TableArrows onClick={handlePreviousPage}>
+        <PiCaretLeft size={32} />
+      </TableArrows>
+      <table>
+        <caption>
+          <div>
+            <span>{workout[pageIndex]?.group}</span>
+            <PageNumber>{pageIndex + 1}</PageNumber>
+          </div>
+        </caption>
+        <thead>
+          <tr>
+            {isEditable && (
+              <th
+                style={{
+                  width: "100px",
+                }}
+              >
+                {editRemoveWord}
+              </th>
+            )}
+            <th>{muscleWord}</th>
+            <th>{exerciseWord}</th>
+            <th>{observationWord}</th>
+            <th>{seriesWord}</th>
+            {NumberOfSeries(highestNumberOfSeriesInTheGroup)}
+          </tr>
+        </thead>
+        <tbody>
+          {generateTableRows({
+            workout,
+            pageIndex,
+            highestNumberOfSeriesInTheGroup,
+            isEditable,
+            onEditExercise,
+            removeExercise,
+          })}
+        </tbody>
+      </table>
+      <TableArrows onClick={handleNextPage}>
+        <PiCaretRight size={32} />
+      </TableArrows>
     </Container>
   );
 }

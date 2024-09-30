@@ -5,7 +5,7 @@ export const Container = styled.header`
     width: 500px;
     height: 300px;
     border-radius: 8px;
-
+    color: black;
     background: ${theme.green500};
 
     display: flex;

@@ -11,6 +11,7 @@ const clickableBoxBase = styled.div`
     cursor: pointer;
   `}
 `;
+
 const spanBase = styled.span`
   ${({ theme }) => css`
     display: flex;
@@ -30,8 +31,39 @@ export const Container = styled(clickableBoxBase)`
     &:hover {
       background: ${theme.gray600};
     }
+    &:hover ${EditButton} {
+      opacity: 1;
+      pointer-events: auto;
+    }
   `}
 `;
+
+export const Header = styled.div`
+  ${({ theme }) => css`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    color: ${theme.gray300};
+    cursor: pointer;
+  `}
+`;
+
+export const EditButton = styled(clickableBoxBase)`
+  ${({ theme }) => css`
+    padding: 4px 8px;
+    opacity: 0;
+    pointer-events: none
+    transition: opacity 0.3s ease; 
+    cursor: pointer;
+    color: ${theme.gray300};
+    &:hover {
+      color: ${theme.gray100};
+    }
+  `}
+`;
+
 export const WorkoutName = styled(spanBase)`
   font-size: 1.5rem;
 `;
