@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components";
-import { BaseButton } from "../../pages/New-Workout/Main/styles";
 
 export const Container = styled.div`
   position: fixed;
@@ -33,12 +32,19 @@ export const Content = styled.div`
   `}
 `;
 
-export const ExitButton = styled(BaseButton)`
+export const ExitButton = styled.button`
   ${({ theme }) => css`
+    background: transparent;
+    align-items: center;
+    text-align: center;
+    margin: 4px;
+    padding: 4px;
+    color: ${theme.gray300};
     position: absolute;
     top: 5px;
     right: 10px;
-    border: 0;
+    border: none;
+
     &:hover {
       color: ${theme.red500};
     }

@@ -1,25 +1,37 @@
 // import { useContext, useState } from "react";
-import { InputForm, NewExerciseForm } from "../components/InputForm";
-import { AddButton, Container, SubmitButton } from "./styles";
+import { ExerciseForm, NewExerciseForm } from "../components/ExerciseForm";
+import {
+  AddButton,
+  Container,
+  CreateNewWorkoutButton,
+  SubmitButton,
+} from "./styles";
 import { Table } from "../../../components/Table";
 import { Modal } from "../../../components/Modal";
 
-import { useContext, useState } from "react";
-import { WorkoutNameForm } from "../components/WorkNameForm";
+import { useContext, useEffect, useState } from "react";
+import { NameForm } from "../components/NameForm";
 import { RegisterWorkoutContext } from "../../../contexts/workoutContext";
 import { Workouts } from "../../../@types";
 import { BiPlus } from "react-icons/bi";
 
 export function NewWorkout() {
-  const { workout, setWorkout, workouts, pageIndex, setPageIndex } = useContext(
-    RegisterWorkoutContext
-  );
-
-  const [workoutName, setWorkoutName] = useState("");
-
-  const newGroup: boolean = !workout[pageIndex]?.group;
+  const {
+    workout,
+    setWorkout,
+    workoutIndex,
+    workouts,
+    pageIndex,
+    setPageIndex,
+  } = useContext(RegisterWorkoutContext);
 
   const isDisableSubmitButton: boolean = !workout[0]?.group ? true : false;
+
+  const [newGroupName, setNewGroupName] = useState(false);
+
+  const [nameRequiredToEdit, setNameRequiredToEdit] = useState<
+    "workout" | "group" | undefined
+  >(undefined);
 
   const [isEdited, setIsEdited] = useState(false);
 
@@ -39,6 +51,7 @@ export function NewWorkout() {
     );
 
     const newExercise = {
+      id: data.exerciseProps.id,
       muscle: data.exerciseProps.muscle,
       exercise: data.exerciseProps.exercise,
       observation: data.exerciseProps.observation,
@@ -52,14 +65,11 @@ export function NewWorkout() {
 
     if (updatedWorkout.length === 0) {
       updatedWorkout.push({
-        group: data.group ?? "",
+        group: workout[pageIndex].group,
         exercisesProps: [newExercise],
       });
     } else {
       const group = updatedWorkout[pageIndex];
-      if (group.exercisesProps.length === 0) {
-        group.group = data.group ?? "";
-      }
 
       if (isEdited) {
         group.exercisesProps = group.exercisesProps.map((exercise, index) => {
@@ -78,28 +88,48 @@ export function NewWorkout() {
 
   const currentPageNumber = (data: number) => {
     setPageIndex(data);
-
     if (data === workout.length - 1) {
       handleNewPage();
     }
   };
 
+  useEffect(() => {
+    setNewGroupName(!workout[pageIndex]?.group);
+  }, [pageIndex, workout]);
+
   const handleNewPage = () => {
+    const currentGroup = workout[pageIndex]?.group || "";
+    console.log(workout[pageIndex]?.group, currentGroup);
     const newGroup = {
-      group: "",
+      group: currentGroup,
       exercisesProps: [],
     };
     setWorkout([...workout, newGroup]);
   };
 
   const handleNewWorkout = () => {
-    setWorkoutName("");
+    setIsEdited(false);
+    newGroupName
+      ? setNameRequiredToEdit("group")
+      : setNameRequiredToEdit(undefined);
     openModal();
   };
 
   const handleWorkoutName = () => {
-    setWorkoutName(" ");
+    if (workouts[workoutIndex].name) setIsEdited(true);
+    setNameRequiredToEdit("workout");
     openModal();
+  };
+
+  const OnGroupNameChange = ({ name }: Workouts) => {
+    const updatedWorkout = workout.map((workoutItem, index) => {
+      if (index === pageIndex) {
+        return { ...workoutItem, group: name };
+      }
+      return workoutItem;
+    });
+    setWorkout(updatedWorkout);
+    closeModal();
   };
 
   const handleSubmitWorkout = ({ name }: Workouts) => {
@@ -112,50 +142,86 @@ export function NewWorkout() {
     workout.splice(numberOfWorkouts, workout.length - numberOfWorkouts);
     const newWorkout: Workouts = { name: name, workout: workout };
     workouts.push(newWorkout);
-    console.log(workouts);
+    console.log(newWorkout);
     setWorkout([]);
     closeModal();
   };
 
-  const onEditExercise = (exerciseNumber: number) => {
+  const OnEditExercise = (exerciseNumber: number) => {
     setIsEdited(true);
     setNumberOfExerciseToEdit(exerciseNumber);
     openModal();
   };
 
-  return (
-    <Container>
-      <Table
-        currentPageNumber={currentPageNumber}
-        nextNewPage={handleNewPage}
-        isEditable={true}
-        OnEditExercise={onEditExercise}
-      />
+  const OnEditGroupName = () => {
+    setIsEdited(true);
+    setNameRequiredToEdit("group");
+    openModal();
+  };
 
-      <Modal isVisible={isModalVisible} onClose={closeModal}>
-        {workoutName ? (
-          <WorkoutNameForm onSubmit={handleSubmitWorkout} />
-        ) : (
-          <InputForm
+  const renderModalField = () => {
+    switch (nameRequiredToEdit) {
+      case "workout":
+        return (
+          <NameForm
+            onSubmit={handleSubmitWorkout}
+            toEdit={isEdited}
+            nameRequiredTo={nameRequiredToEdit}
+          />
+        );
+
+      case "group":
+        return (
+          <NameForm
+            onSubmit={OnGroupNameChange}
+            toEdit={isEdited}
+            nameRequiredTo={nameRequiredToEdit}
+          />
+        );
+
+      default:
+        return (
+          <ExerciseForm
             onSubmit={handleSubmit}
-            newGroup={newGroup}
             toEdit={isEdited}
             numberOfExerciseToEdit={numberOfExerciseToEdit}
           />
-        )}
-      </Modal>
+        );
+    }
+  };
 
-      <footer>
-        <AddButton onClick={handleNewWorkout}>
-          <BiPlus size={20} />
-        </AddButton>
-        <SubmitButton
-          disabled={isDisableSubmitButton}
-          onClick={handleWorkoutName}
-        >
-          Submit
-        </SubmitButton>
-      </footer>
+  return (
+    <Container>
+      {!(workout.length === 0) ? (
+        <>
+          <Table
+            currentPageNumber={currentPageNumber}
+            nextNewPage={handleNewPage}
+            isEditable={true}
+            OnEditExercise={OnEditExercise}
+            OnEditGroupName={OnEditGroupName}
+          />
+
+          <Modal isVisible={isModalVisible} onClose={closeModal}>
+            {renderModalField()}
+          </Modal>
+          <footer>
+            <AddButton onClick={handleNewWorkout}>
+              <BiPlus size={32} />
+            </AddButton>
+            <SubmitButton
+              disabled={isDisableSubmitButton}
+              onClick={handleWorkoutName}
+            >
+              Salvar
+            </SubmitButton>
+          </footer>
+        </>
+      ) : (
+        <CreateNewWorkoutButton onClick={handleNewPage}>
+          Clique aqui para criar um novo treino
+        </CreateNewWorkoutButton>
+      )}
     </Container>
   );
 }

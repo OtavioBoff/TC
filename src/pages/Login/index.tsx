@@ -1,4 +1,4 @@
-import DraggableTable from "../../drogabletest";
+import Test from "../../test";
 import { Container } from "./styles";
 // import { Link } from "react-router-dom";
 
@@ -22,7 +22,7 @@ export function Login() {
           <span>Convidado</span>
         </button>
       </Link> */}
-      <DraggableTable></DraggableTable>
+      <Test />
     </Container>
   );
 }

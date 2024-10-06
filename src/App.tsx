@@ -6,7 +6,7 @@ import { GlobalStyle } from "./styles/global";
 import { useState } from "react";
 import { Workout, Workouts } from "./@types";
 import { RegisterWorkoutContext } from "./contexts/workoutContext";
-import { workoutTest } from "./test";
+import { workoutTest } from "./workoutTest";
 
 export function App() {
   const [workout, setWorkout] = useState<Workout[]>([]);
@@ -16,6 +16,7 @@ export function App() {
     workoutTest,
   ]);
   const [pageIndex, setPageIndex] = useState<number>(0);
+  const [workoutIndex, setWorkoutIndex] = useState<number>(0);
   return (
     <RegisterWorkoutContext.Provider
       value={{
@@ -25,6 +26,8 @@ export function App() {
         setPageIndex,
         workouts,
         setWorkouts,
+        workoutIndex,
+        setWorkoutIndex,
       }}
     >
       <ThemeProvider theme={defaultTheme}>

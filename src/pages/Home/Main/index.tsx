@@ -6,9 +6,8 @@ import { Table } from "../../../components/Table";
 import { Modal } from "../../../components/Modal";
 
 export function Home() {
-  const { workouts, setWorkout, setPageIndex } = useContext(
-    RegisterWorkoutContext
-  );
+  const { workouts, setWorkout, setWorkouts, setPageIndex, setWorkoutIndex } =
+    useContext(RegisterWorkoutContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
@@ -23,9 +22,16 @@ export function Home() {
   }
 
   function openWorkoutToEdit(workoutIndex: number) {
+    setWorkoutIndex(workoutIndex);
     setIsEditable(true);
     setWorkout(workouts[workoutIndex].workout);
-    openModal();
+    setPageIndex(0);
+  }
+
+  function deleteWorkout(workoutIndex: number) {
+    const updatedWorkouts = [...workouts];
+    updatedWorkouts.splice(workoutIndex, 1);
+    setWorkouts(updatedWorkouts);
   }
 
   return (
@@ -36,6 +42,7 @@ export function Home() {
           workoutIndex={index}
           openWorkout={openWorkout}
           openWorkoutToEdit={openWorkoutToEdit}
+          deleteWorkout={deleteWorkout}
         />
       ))}
       <Modal isVisible={isModalVisible} onClose={closeModal}>

@@ -11,6 +11,7 @@ export const Container = styled.div`
     footer {
       display: flex;
       width: 100%;
+      align-items: center;
       flex-direction: column;
     }
   `}
@@ -19,36 +20,74 @@ export const Container = styled.div`
 export const BaseButton = styled.button`
   ${({ theme }) => css`
     background: transparent;
+    display: flex;
+    width: 50%;
+    justify-content: center;
     align-items: center;
     text-align: center;
     margin: 4px;
     border: 1px solid ${theme.gray300};
     border-radius: 8px;
-    padding: 4px;
+    padding: 12px 24px;
+    font-size: 1.5rem;
+    font-weight: 500;
     color: ${theme.gray300};
-    &:focus {
-      outline: 0;
-    }
-  `}
-`;
-export const RemoveButton = styled(BaseButton)`
-  ${({ theme }) => css`
+    cursor: pointer;
+    transition: all 0.3s ease;
+
     &:hover {
-      color: ${theme.red500};
+      background: ${theme.gray300};
+      color: ${theme.gray800};
+      border-color: ${theme.gray500};
     }
   `}
 `;
+
 export const AddButton = styled(BaseButton)`
   ${({ theme }) => css`
+    background: transparent;
+    color: ${theme.green500};
+    border: 3px dashed ${theme.green700};
+
     &:hover {
-      color: ${theme.green500};
+      background: ${theme.green500};
+      color: ${theme.white};
+      border-color: ${theme.green700};
     }
   `}
 `;
+
 export const SubmitButton = styled(BaseButton)`
   ${({ theme }) => css`
+    background: transparent;
+    color: ${theme.gray300};
+    border: 1px solid ${theme.gray400};
+
     &:hover {
-      color: ${theme.white};
+      background: ${theme.gray300};
+      color: ${theme.gray900};
+      border-color: ${theme.gray400};
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  `}
+`;
+
+export const CreateNewWorkoutButton = styled(BaseButton)`
+  ${({ theme }) => css`
+    background: transparent;
+    color: ${theme.gray300};
+    font-size: 3rem;
+    border: 3px dashed ${theme.green500};
+    border-radius: 12px;
+    padding: 10px 20px;
+    transition: all 0.15s ease;
+    &:hover {
+      background: ${theme.green500};
+      color: ${theme.gray900};
+      border-color: ${theme.green700};
     }
   `}
 `;

@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 const clickableBoxBase = styled.div`
@@ -35,6 +36,10 @@ export const Container = styled(clickableBoxBase)`
       opacity: 1;
       pointer-events: auto;
     }
+    &:hover ${RemoveButton} {
+      opacity: 1;
+      pointer-events: auto;
+    }
   `}
 `;
 
@@ -47,20 +52,6 @@ export const Header = styled.div`
     justify-content: space-between;
     color: ${theme.gray300};
     cursor: pointer;
-  `}
-`;
-
-export const EditButton = styled(clickableBoxBase)`
-  ${({ theme }) => css`
-    padding: 4px 8px;
-    opacity: 0;
-    pointer-events: none
-    transition: opacity 0.3s ease; 
-    cursor: pointer;
-    color: ${theme.gray300};
-    &:hover {
-      color: ${theme.gray100};
-    }
   `}
 `;
 
@@ -82,4 +73,32 @@ export const WorkoutGroup = styled.div`
   gap: 4px;
   width: 100%;
   flex-wrap: wrap;
+`;
+
+export const EditButton = styled(NavLink)`
+  ${({ theme }) => css`
+    padding: 4px 8px;
+    opacity: 0;
+    pointer-events: none
+    cursor: pointer;
+    color: ${theme.gray300};
+    &:hover {
+      color: ${theme.green500};
+    }
+  `}
+`;
+
+export const RemoveButton = styled.button`
+  ${({ theme }) => css`
+    padding: 4px 8px;
+    opacity: 0;
+    pointer-events: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: ${theme.gray300};
+    &:hover {
+      color: ${theme.red500};
+    }
+  `}
 `;

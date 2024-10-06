@@ -4,6 +4,8 @@ import { Workout, Workouts } from "../@types";
 type RegisterWorkoutContextData = {
   workouts: Workouts[];
   setWorkouts: (data: Workouts[]) => void;
+  workoutIndex: number;
+  setWorkoutIndex: (data: number) => void;
   workout: Workout[];
   setWorkout: (data: Workout[]) => void;
   pageIndex: number;

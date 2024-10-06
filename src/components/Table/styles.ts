@@ -1,12 +1,23 @@
 import styled, { css } from "styled-components";
 
 export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+export const Content = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+export const MiddleContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     width: 100%;
     height: auto;
-    overflow: auto;
     justify-content: space-between;
+    overflow: auto;
     table {
       width: 100%;
       border-collapse: collapse;
@@ -18,16 +29,12 @@ export const Container = styled.div`
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
       caption {
-        div {
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
-          padding-bottom: 8px;
-        }
         width: 100%;
         font-size: 1.5rem;
+        padding: 1rem;
         font-weight: bold;
         color: ${theme.gray100};
+        text-transform: uppercase;
       }
       thead {
         background-color: ${theme.gray600};
@@ -75,8 +82,9 @@ export const TableArrows = styled.button`
   ${({ theme }) => css`
     border: 0;
     margin: 1rem;
+    padding-top: 3.5rem;
     background: transparent;
-    color: ${theme.white};
+    color: ${theme.gray300};
     text-align: center;
     align-items: center;
     display: flex;
@@ -87,12 +95,10 @@ export const TableArrows = styled.button`
     }
   `}
 `;
-export const PageNumber = styled.span`
-  ${({ theme }) => css`
-    color: ${theme.gray100};
-    text-align: center;
-    font-size: 1rem;
-  `}
+
+export const Footer = styled.div`
+  display: flex;
+  justify-content: end;
 `;
 
 const baseButton = styled.button`
@@ -100,7 +106,10 @@ const baseButton = styled.button`
     color: ${theme.gray300};
     background: transparent;
     border: 0;
-    align-content: center;
+    display: flex;
+    flex-grow: 0;
+    justify-content: center;
+    align-items: center;
     &:hover {
       box-shadow: "0 0 0 2px white";
     }
@@ -119,5 +128,33 @@ export const RemoveButton = styled(baseButton)`
     &:hover {
       color: ${theme.red500};
     }
+  `}
+`;
+
+const baseSpan = styled.span`
+  ${({ theme }) => css`
+    color: ${theme.gray300};
+    padding: 2rem;
+    font-size: 1.5rem;
+  `}
+`;
+export const PageIndex = styled(baseSpan)`
+  text-align: end;
+`;
+export const WorkoutGroup = styled(baseSpan)`
+  ${({ theme }) => css`
+    text-align: center;
+    padding: 1rem 2rem;
+    color: ${theme.gray100};
+    font-size: 2rem;
+  `}
+`;
+
+export const EmptyPage = styled(baseSpan)`
+  ${({ theme }) => css`
+    color: ${theme.gray400};
+    font-size: 2rem;
+    text-align: center;
+    height: 100%;
   `}
 `;

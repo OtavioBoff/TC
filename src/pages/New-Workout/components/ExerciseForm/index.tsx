@@ -4,10 +4,10 @@ import {
   InputsContainer,
   MiddleContainer,
   NumberInput,
-  SubmitButton,
   TextAreaInput,
   TextInput,
 } from "./styles";
+import { SubmitButton } from "../../Main/styles";
 import { ExercisesProps } from "../../../../@types";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useContext } from "react";
@@ -15,93 +15,96 @@ import { RegisterWorkoutContext } from "../../../../contexts/workoutContext";
 
 export interface NewExerciseForm {
   exerciseProps: ExercisesProps;
-  group?: string;
 }
 
-interface InputFormProps {
+interface ExerciseFormProps {
   onSubmit: (data: NewExerciseForm) => void;
-  newGroup: boolean;
   toEdit: boolean;
   numberOfExerciseToEdit: number;
 }
 
-export function InputForm({
+export function ExerciseForm({
   onSubmit,
-  newGroup,
   toEdit,
   numberOfExerciseToEdit,
-}: InputFormProps) {
+}: ExerciseFormProps) {
   const { workout, pageIndex } = useContext(RegisterWorkoutContext);
 
   const newRowForm = useForm<NewExerciseForm>({});
 
   const { register, handleSubmit, watch, control } = newRowForm;
 
+  const numberOfExerciseToId = workout.reduce((sum, currentWorkout) => {
+    const numberOfExercises = currentWorkout.exercisesProps.length;
+    return sum + numberOfExercises;
+  }, 0);
+
   useFieldArray({
     control,
     name: "exerciseProps.seriesProps.props",
   });
 
-  const seriesCount = watch("exerciseProps.seriesProps.num") ?? 1;
+  const seriesCount =
+    watch("exerciseProps.seriesProps.num") !== undefined
+      ? watch("exerciseProps.seriesProps.num")
+      : toEdit
+      ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit].seriesProps
+          .num
+      : 1;
 
   const generateToRepsAndWeight = (numberOfSeries: number) => {
-    if (seriesCount > 8) numberOfSeries = 8;
-    return Array.from({ length: numberOfSeries }).map((_, index) => (
-      <div key={index} style={{ display: "flex", gap: "10px" }}>
-        <InputsBox>
-          <label>Reps</label>
-          <NumberInput
-            type="number"
-            placeholder="0"
-            {...register(`exerciseProps.seriesProps.props.${index}.reps`, {
-              valueAsNumber: true,
-            })}
-            defaultValue={
-              toEdit
-                ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
-                    .seriesProps?.props[index]?.reps
-                : 0
-            }
-          />
-        </InputsBox>
-        <InputsBox>
-          <label>Weight</label>
-          <NumberInput
-            type="number"
-            placeholder="0 kg"
-            {...register(`exerciseProps.seriesProps.props.${index}.weight`, {
-              valueAsNumber: true,
-            })}
-            defaultValue={
-              toEdit
-                ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
-                    .seriesProps?.props[index]?.weight
-                : 0
-            }
-          />
-        </InputsBox>
-      </div>
-    ));
+    if (seriesCount > 12) numberOfSeries = 12;
+    return Array.from({ length: numberOfSeries }).map((_, index) => {
+      return (
+        <div key={index} style={{ display: "flex", gap: "10px" }}>
+          <InputsBox>
+            {index === 0 && <label>Repetições</label>}
+            <NumberInput
+              type="number"
+              placeholder="0"
+              {...register(`exerciseProps.seriesProps.props.${index}.reps`, {
+                valueAsNumber: true,
+              })}
+              defaultValue={
+                toEdit
+                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                      .seriesProps?.props[index]?.reps
+                  : 0
+              }
+            />
+          </InputsBox>
+          <InputsBox>
+            {index === 0 && <label>Peso</label>}
+            <NumberInput
+              type="number"
+              placeholder="0 kg"
+              {...register(`exerciseProps.seriesProps.props.${index}.weight`, {
+                valueAsNumber: true,
+              })}
+              defaultValue={
+                toEdit
+                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                      .seriesProps?.props[index]?.weight
+                  : 0
+              }
+            />
+          </InputsBox>
+        </div>
+      );
+    });
   };
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
-      {newGroup && (
-        <InputsBox>
-          <label>Grupo</label>
-          <TextInput
-            placeholder="nome"
-            id="group-name"
-            {...register("group", { required: true })}
-            defaultValue={toEdit ? workout[pageIndex].group : ""}
-          />
-        </InputsBox>
-      )}
       <MiddleContainer>
+        <input
+          type="hidden"
+          {...register("exerciseProps.id")}
+          value={`ex${numberOfExerciseToId + 1}`}
+        />
         <InputsContainer>
           <InputsBox>
-            <label>Muscle</label>
+            <label>Músculo</label>
             <TextInput
-              placeholder="muscle"
               {...register("exerciseProps.muscle")}
               defaultValue={
                 toEdit
@@ -112,9 +115,8 @@ export function InputForm({
             />
           </InputsBox>
           <InputsBox>
-            <label>Exercise</label>
+            <label>Exercício</label>
             <TextInput
-              placeholder="exercise"
               {...register("exerciseProps.exercise")}
               defaultValue={
                 toEdit
@@ -125,9 +127,8 @@ export function InputForm({
             />
           </InputsBox>
           <InputsBox>
-            <label>Observation</label>
+            <label>Observações</label>
             <TextAreaInput
-              placeholder="description"
               {...register("exerciseProps.observation")}
               defaultValue={
                 toEdit
@@ -138,13 +139,12 @@ export function InputForm({
             />
           </InputsBox>
           <InputsBox>
-            <label>Series</label>
+            <label>Séries</label>
             <NumberInput
               id="series"
               type="number"
-              placeholder="0"
               min={1}
-              max={8}
+              max={12}
               {...register("exerciseProps.seriesProps.num", {
                 valueAsNumber: true,
               })}
@@ -158,8 +158,10 @@ export function InputForm({
           </InputsBox>
         </InputsContainer>
         <InputsContainer>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {generateToRepsAndWeight(seriesCount < 1 ? 1 : seriesCount)}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+          >
+            {generateToRepsAndWeight(seriesCount)}
           </div>
         </InputsContainer>
       </MiddleContainer>

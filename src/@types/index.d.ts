@@ -11,6 +11,7 @@ export interface Workout {
 }
 
 export interface ExercisesProps {
+  id: string;
   muscle: string;
   exercise: string;
   observation?: string;

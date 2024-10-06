@@ -7,11 +7,12 @@ export const workoutTest: Workouts = {
       group: "Peito e Tríceps",
       exercisesProps: [
         {
+          id: "ex1",
           muscle: "Peito",
           exercise: "Supino Reto",
           observation: "Manter os pés no chão",
           seriesProps: {
-            num: 4, // Adicione o número de séries para refletir o número de props
+            num: 4,
             props: [
               { reps: 10, weight: 60 },
               { reps: 8, weight: 70 },
@@ -21,10 +22,11 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex2",
           muscle: "Peito",
           exercise: "Supino Inclinado",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [
               { reps: 10, weight: 55 },
               { reps: 8, weight: 65 },
@@ -33,10 +35,11 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex3",
           muscle: "Tríceps",
           exercise: "Tríceps na Polia Alta",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [
               { reps: 12, weight: 40 },
               { reps: 10, weight: 45 },
@@ -45,10 +48,11 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex4",
           muscle: "Tríceps",
           exercise: "Mergulho",
           seriesProps: {
-            num: 4, // Adicione o número de séries
+            num: 4,
             props: [{ reps: 15 }, { reps: 12 }, { reps: 10 }, { reps: 8 }],
           },
         },
@@ -58,18 +62,20 @@ export const workoutTest: Workouts = {
       group: "Costas e Bíceps",
       exercisesProps: [
         {
+          id: "ex5",
           muscle: "Costas",
           exercise: "Puxada na Barra Fixa",
           seriesProps: {
-            num: 4, // Adicione o número de séries
+            num: 4,
             props: [{ reps: 8 }, { reps: 7 }, { reps: 6 }, { reps: 10 }],
           },
         },
         {
+          id: "ex6",
           muscle: "Costas",
           exercise: "Remada Curvada",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [
               { reps: 10, weight: 60 },
               { reps: 8, weight: 70 },
@@ -78,10 +84,11 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex7",
           muscle: "Bíceps",
           exercise: "Rosca Direta",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [
               { reps: 12, weight: 30 },
               { reps: 10, weight: 35 },
@@ -90,18 +97,20 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex8",
           muscle: "Bíceps",
           exercise: "Rosca Martelo",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [{ reps: 12 }, { reps: 10 }, { reps: 8 }],
           },
         },
         {
+          id: "ex9",
           muscle: "Bíceps",
           exercise: "Rosca Scott",
           seriesProps: {
-            num: 2, // Adicione o número de séries
+            num: 2,
             props: [
               { reps: 10, weight: 25 },
               { reps: 8, weight: 30 },
@@ -114,10 +123,11 @@ export const workoutTest: Workouts = {
       group: "Pernas",
       exercisesProps: [
         {
+          id: "ex10",
           muscle: "Quadríceps",
           exercise: "Agachamento Livre",
           seriesProps: {
-            num: 6, // Adicione o número de séries
+            num: 6,
             props: [
               { reps: 10, weight: 80 },
               { reps: 8, weight: 90 },
@@ -129,10 +139,11 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex11",
           muscle: "Quadríceps",
           exercise: "Leg Press",
           seriesProps: {
-            num: 4, // Adicione o número de séries
+            num: 4,
             props: [
               { reps: 12, weight: 150 },
               { reps: 10, weight: 170 },
@@ -142,10 +153,11 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex12",
           muscle: "Posterior de Coxa",
           exercise: "Cadeira Flexora",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [
               { reps: 12, weight: 40 },
               { reps: 10, weight: 50 },
@@ -154,10 +166,11 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex13",
           muscle: "Posterior de Coxa",
           exercise: "Stiff",
           seriesProps: {
-            num: 4, // Adicione o número de séries
+            num: 4,
             props: [
               { reps: 10, weight: 70 },
               { reps: 8, weight: 80 },
@@ -167,10 +180,11 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex14",
           muscle: "Glúteos",
           exercise: "Elevação de Quadril",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [{ reps: 15 }, { reps: 12 }, { reps: 10 }],
           },
         },
@@ -180,10 +194,11 @@ export const workoutTest: Workouts = {
       group: "Ombros e Abdômen",
       exercisesProps: [
         {
+          id: "ex15",
           muscle: "Ombros",
           exercise: "Desenvolvimento com Halteres",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [
               { reps: 10, weight: 30 },
               { reps: 8, weight: 35 },
@@ -192,10 +207,11 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex16",
           muscle: "Ombros",
           exercise: "Elevação Lateral",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [
               { reps: 12, weight: 15 },
               { reps: 10, weight: 20 },
@@ -204,10 +220,11 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex17",
           muscle: "Ombros",
           exercise: "Elevação Frontal",
           seriesProps: {
-            num: 2, // Adicione o número de séries
+            num: 2,
             props: [
               { reps: 12, weight: 10 },
               { reps: 10, weight: 15 },
@@ -215,18 +232,20 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex18",
           muscle: "Abdômen",
           exercise: "Crunch",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [{ reps: 20 }, { reps: 18 }, { reps: 15 }],
           },
         },
         {
+          id: "ex19",
           muscle: "Abdômen",
           exercise: "Elevação de Pernas",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [{ reps: 15 }, { reps: 12 }, { reps: 10 }],
           },
         },
@@ -236,10 +255,11 @@ export const workoutTest: Workouts = {
       group: "Braços e Abdômen Inferior",
       exercisesProps: [
         {
+          id: "ex20",
           muscle: "Tríceps",
           exercise: "Tríceps Testa",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [
               { reps: 12, weight: 25 },
               { reps: 10, weight: 30 },
@@ -248,10 +268,11 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex21",
           muscle: "Bíceps",
           exercise: "Rosca Alternada",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [
               { reps: 12, weight: 20 },
               { reps: 10, weight: 25 },
@@ -260,18 +281,20 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex22",
           muscle: "Tríceps",
           exercise: "Tríceps na Barra",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [{ reps: 12 }, { reps: 10 }, { reps: 8 }],
           },
         },
         {
+          id: "ex23",
           muscle: "Bíceps",
           exercise: "Rosca Concentrada",
           seriesProps: {
-            num: 2, // Adicione o número de séries
+            num: 2,
             props: [
               { reps: 10, weight: 15 },
               { reps: 8, weight: 20 },
@@ -279,23 +302,16 @@ export const workoutTest: Workouts = {
           },
         },
         {
+          id: "ex24",
           muscle: "Abdômen Inferior",
           exercise: "Prancha",
           seriesProps: {
-            num: 3, // Adicione o número de séries
+            num: 3,
             props: [
               { reps: 60 }, // Tempo em segundos
               { reps: 45 },
               { reps: 30 },
             ],
-          },
-        },
-        {
-          muscle: "Abdômen Inferior",
-          exercise: "Crunch Invertido",
-          seriesProps: {
-            num: 3, // Adicione o número de séries
-            props: [{ reps: 15 }, { reps: 12 }, { reps: 10 }],
           },
         },
       ],
