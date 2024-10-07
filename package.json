@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",
-    "@types/jspdf": "^2.0.0",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.3",
     "react": "^18.3.1",
@@ -26,6 +25,7 @@
     "styled-components": "^6.1.11"
   },
   "devDependencies": {
+    "@types/jspdf": "^2.0.0",
     "@types/react": "^18.3.10",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^18.3.0",

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Container,
   Content,
@@ -12,16 +12,19 @@ import {
   WorkoutGroup,
 } from "./styles";
 import { generateTableRows } from "./TableRow";
-import { RegisterWorkoutContext } from "../../contexts/workoutContext";
 import { PiCaretLeft, PiCaretRight, PiTrash } from "react-icons/pi";
 import { BiEdit } from "react-icons/bi";
+import { Workout } from "../../@types";
+import { RegisterWorkoutContext } from "../../contexts/workoutContext";
 
 export interface TableProps {
+  workout: Workout[];
+  workoutPageIndex?: number;
   isEditable?: boolean;
-  currentPageNumber?: (pageIndex: number) => void;
+  OnPageNumberChange?: (currentPageNumber: number) => void;
   OnEditExercise?: (exerciseNumber: number) => void;
   OnEditGroupName?: () => void;
-  nextNewPage?: () => void;
+  OnNextPageIsNew?: () => void;
   editRemoveWord?: string;
   muscleWord?: string;
   exerciseWord?: string;
@@ -32,11 +35,13 @@ export interface TableProps {
 }
 
 export function Table({
+  workout,
+  workoutPageIndex = 0,
   isEditable = false,
-  nextNewPage,
+  OnNextPageIsNew,
   OnEditExercise,
   OnEditGroupName,
-  currentPageNumber,
+  OnPageNumberChange,
   editRemoveWord = "Editar\n\nExcluir",
   muscleWord = "Músculo",
   exerciseWord = "Exercícios",
@@ -45,15 +50,21 @@ export function Table({
   repsWord = "Reps",
   weightWord = "Peso",
 }: TableProps) {
-  const { workout, setWorkout, pageIndex, setPageIndex } = useContext(
-    RegisterWorkoutContext
-  );
+  const { setWorkout } = useContext(RegisterWorkoutContext);
+
+  const [tableWorkout, setTableWorkout] = useState<Workout[]>(workout);
+  const [tablePageIndex, setTablePageIndex] =
+    useState<number>(workoutPageIndex);
 
   useEffect(() => {
-    if (currentPageNumber) currentPageNumber(pageIndex);
-  }, [pageIndex, workout, currentPageNumber]);
+    setTableWorkout(workout);
+  }, [workout]);
 
-  if (workout.length === 0) {
+  useEffect(() => {
+    OnPageNumberChange?.(tablePageIndex);
+  }, [tablePageIndex, tableWorkout, OnPageNumberChange]);
+
+  if (tableWorkout.length === 0) {
     return (
       <Container>
         <Content>
@@ -64,18 +75,20 @@ export function Table({
   }
 
   function handleNextPage() {
-    const numberOfGroups = workout.length - 1;
-    if (numberOfGroups > pageIndex && !(workout[pageIndex].group == ""))
-      setPageIndex(pageIndex + 1);
-    if (pageIndex == numberOfGroups && nextNewPage) nextNewPage();
+    const lastPageIndex = tableWorkout.length - 1;
+    if (tablePageIndex < lastPageIndex) {
+      setTablePageIndex((prevIndex) => prevIndex + 1);
+    } else if (tablePageIndex === lastPageIndex && OnNextPageIsNew) {
+      OnNextPageIsNew();
+    }
   }
 
   function handlePreviousPage() {
-    if (pageIndex) setPageIndex(pageIndex - 1);
+    if (tablePageIndex) setTablePageIndex(tablePageIndex - 1);
   }
 
-  const highestNumberOfSeriesInTheGroup = workout[
-    pageIndex
+  const highestNumberOfSeriesInTheGroup = tableWorkout[
+    tablePageIndex
   ]?.exercisesProps.reduce((max: number, exercise) => {
     const numberOfSeries = exercise.seriesProps.props.length;
     return numberOfSeries > max ? numberOfSeries : max;
@@ -95,24 +108,32 @@ export function Table({
   }
 
   function removeExercise(exerciseNumber: number) {
-    const updatedWorkout = [...workout];
+    const updatedWorkout = [...tableWorkout];
 
-    const currentExercises = [...updatedWorkout[pageIndex].exercisesProps];
+    const currentExercises = [...updatedWorkout[tablePageIndex].exercisesProps];
 
     currentExercises.splice(exerciseNumber, 1);
 
-    updatedWorkout[pageIndex] = {
-      ...updatedWorkout[pageIndex],
+    updatedWorkout[tablePageIndex] = {
+      ...updatedWorkout[tablePageIndex],
       exercisesProps: currentExercises,
     };
 
+    setTableWorkout(updatedWorkout);
     setWorkout(updatedWorkout);
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    if (event.key === "ArrowLeft") handlePreviousPage();
-    if (event.key === "ArrowRight") handleNextPage();
+    switch (event.key) {
+      case "ArrowLeft":
+        handlePreviousPage();
+        break;
+      case "ArrowRight":
+        handleNextPage();
+        break;
+      default:
+        break;
+    }
   };
 
   const handleEditGroupName = () => {
@@ -120,8 +141,9 @@ export function Table({
   };
 
   const handleRemovePage = () => {
-    const updatedWorkout = [...workout];
-    updatedWorkout.splice(pageIndex, 1);
+    const updatedWorkout = [...tableWorkout];
+    updatedWorkout.splice(tablePageIndex, 1);
+    setTableWorkout(updatedWorkout);
     setWorkout(updatedWorkout);
   };
 
@@ -135,7 +157,9 @@ export function Table({
           <table>
             <caption>
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <WorkoutGroup>{workout[pageIndex]?.group}</WorkoutGroup>
+                <WorkoutGroup>
+                  {tableWorkout[tablePageIndex]?.group}
+                </WorkoutGroup>
                 {isEditable && (
                   <EditButton
                     title="Editar nome do grupo"
@@ -147,7 +171,7 @@ export function Table({
               </div>
             </caption>
             <thead>
-              {workout[pageIndex]?.exercisesProps.length == 0 ? (
+              {tableWorkout[tablePageIndex]?.exercisesProps.length == 0 ? (
                 <></>
               ) : (
                 <tr>
@@ -169,7 +193,7 @@ export function Table({
               )}
             </thead>
             <tbody>
-              {workout[pageIndex]?.exercisesProps.length == 0 ? (
+              {tableWorkout[tablePageIndex]?.exercisesProps.length == 0 ? (
                 <tr>
                   <td>
                     <EmptyPage>{"Pagina vazia"}</EmptyPage>
@@ -177,8 +201,8 @@ export function Table({
                 </tr>
               ) : (
                 generateTableRows({
-                  workout,
-                  pageIndex,
+                  tableWorkout,
+                  tablePageIndex,
                   highestNumberOfSeriesInTheGroup,
                   isEditable,
                   onEditExercise,
@@ -193,7 +217,7 @@ export function Table({
         </TableArrows>
       </Content>
       <Footer>
-        <PageIndex>{pageIndex + 1}</PageIndex>
+        <PageIndex>{tablePageIndex + 1}</PageIndex>
         {isEditable && (
           <RemoveButton title="Excluir Página" onClick={handleRemovePage}>
             <PiTrash size={24} />

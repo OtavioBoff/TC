@@ -1,4 +1,3 @@
-// import { useContext, useState } from "react";
 import { ExerciseForm, NewExerciseForm } from "../components/ExerciseForm";
 import {
   AddButton,
@@ -19,10 +18,13 @@ export function NewWorkout() {
   const {
     workout,
     setWorkout,
-    workoutIndex,
+    workoutsIndex,
     workouts,
+    setWorkouts,
     pageIndex,
     setPageIndex,
+    setIsEditingWorkout,
+    isEditingWorkout,
   } = useContext(RegisterWorkoutContext);
 
   const isDisableSubmitButton: boolean = !workout[0]?.group ? true : false;
@@ -43,7 +45,48 @@ export function NewWorkout() {
 
   const closeModal = () => setIsModalVisible(false);
 
-  const handleSubmit = (data: NewExerciseForm) => {
+  const OnPageNumberChange = (currentPageNumber: number) => {
+    setPageIndex(currentPageNumber);
+    if (currentPageNumber === workout.length - 1) {
+      handleNewPage();
+    }
+  };
+
+  useEffect(() => {
+    setNewGroupName(!workout[pageIndex]?.group);
+  }, [pageIndex, workout]);
+
+  const handleNewPage = () => {
+    const hasEmptyPage = workout.some((page) => page.group.trim() === "");
+    if (hasEmptyPage) return;
+
+    const newGroup = {
+      group: "",
+      exercisesProps: [],
+    };
+    setWorkout([...workout, newGroup]);
+  };
+
+  const handleNewWorkout = () => {
+    setIsEditingWorkout(false);
+    handleNewPage();
+  };
+
+  const handleNewExercise = () => {
+    setIsEdited(false);
+    newGroupName
+      ? setNameRequiredToEdit("group")
+      : setNameRequiredToEdit(undefined);
+    openModal();
+  };
+
+  const handleWorkoutName = () => {
+    if (workouts[workoutsIndex].name) setIsEdited(true);
+    setNameRequiredToEdit("workout");
+    openModal();
+  };
+
+  const handleSubmitExercise = (data: NewExerciseForm) => {
     data.exerciseProps.seriesProps.props.splice(
       data.exerciseProps.seriesProps.num,
       data.exerciseProps.seriesProps.props.length -
@@ -86,53 +129,7 @@ export function NewWorkout() {
     closeModal();
   };
 
-  const currentPageNumber = (data: number) => {
-    setPageIndex(data);
-    if (data === workout.length - 1) {
-      handleNewPage();
-    }
-  };
-
-  useEffect(() => {
-    setNewGroupName(!workout[pageIndex]?.group);
-  }, [pageIndex, workout]);
-
-  const handleNewPage = () => {
-    const currentGroup = workout[pageIndex]?.group || "";
-    console.log(workout[pageIndex]?.group, currentGroup);
-    const newGroup = {
-      group: currentGroup,
-      exercisesProps: [],
-    };
-    setWorkout([...workout, newGroup]);
-  };
-
-  const handleNewWorkout = () => {
-    setIsEdited(false);
-    newGroupName
-      ? setNameRequiredToEdit("group")
-      : setNameRequiredToEdit(undefined);
-    openModal();
-  };
-
-  const handleWorkoutName = () => {
-    if (workouts[workoutIndex].name) setIsEdited(true);
-    setNameRequiredToEdit("workout");
-    openModal();
-  };
-
-  const OnGroupNameChange = ({ name }: Workouts) => {
-    const updatedWorkout = workout.map((workoutItem, index) => {
-      if (index === pageIndex) {
-        return { ...workoutItem, group: name };
-      }
-      return workoutItem;
-    });
-    setWorkout(updatedWorkout);
-    closeModal();
-  };
-
-  const handleSubmitWorkout = ({ name }: Workouts) => {
+  const handleSubmit = ({ name }: Workouts) => {
     const numberOfWorkouts = workout.reduce(
       (max: number, _, index, workouts) => {
         return workouts[index].group != "" ? max + 1 : max;
@@ -141,9 +138,12 @@ export function NewWorkout() {
     );
     workout.splice(numberOfWorkouts, workout.length - numberOfWorkouts);
     const newWorkout: Workouts = { name: name, workout: workout };
-    workouts.push(newWorkout);
-    console.log(newWorkout);
+    const updatedWorkouts = isEditingWorkout
+      ? workouts.map((w, index) => (index === workoutsIndex ? newWorkout : w))
+      : [...workouts, newWorkout];
+    setWorkouts(updatedWorkouts);
     setWorkout([]);
+    setPageIndex(0);
     closeModal();
   };
 
@@ -159,12 +159,23 @@ export function NewWorkout() {
     openModal();
   };
 
+  const OnGroupNameChange = ({ name }: Workouts) => {
+    const updatedWorkout = workout.map((workoutItem, index) => {
+      if (index === pageIndex) {
+        return { ...workoutItem, group: name };
+      }
+      return workoutItem;
+    });
+    setWorkout(updatedWorkout);
+    closeModal();
+  };
+
   const renderModalField = () => {
     switch (nameRequiredToEdit) {
       case "workout":
         return (
           <NameForm
-            onSubmit={handleSubmitWorkout}
+            onSubmit={handleSubmit}
             toEdit={isEdited}
             nameRequiredTo={nameRequiredToEdit}
           />
@@ -182,7 +193,7 @@ export function NewWorkout() {
       default:
         return (
           <ExerciseForm
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmitExercise}
             toEdit={isEdited}
             numberOfExerciseToEdit={numberOfExerciseToEdit}
           />
@@ -195,8 +206,10 @@ export function NewWorkout() {
       {!(workout.length === 0) ? (
         <>
           <Table
-            currentPageNumber={currentPageNumber}
-            nextNewPage={handleNewPage}
+            workout={workout}
+            workoutPageIndex={pageIndex}
+            OnPageNumberChange={OnPageNumberChange}
+            OnNextPageIsNew={handleNewPage}
             isEditable={true}
             OnEditExercise={OnEditExercise}
             OnEditGroupName={OnEditGroupName}
@@ -206,7 +219,7 @@ export function NewWorkout() {
             {renderModalField()}
           </Modal>
           <footer>
-            <AddButton onClick={handleNewWorkout}>
+            <AddButton onClick={handleNewExercise}>
               <BiPlus size={32} />
             </AddButton>
             <SubmitButton
@@ -218,7 +231,7 @@ export function NewWorkout() {
           </footer>
         </>
       ) : (
-        <CreateNewWorkoutButton onClick={handleNewPage}>
+        <CreateNewWorkoutButton onClick={handleNewWorkout}>
           Clique aqui para criar um novo treino
         </CreateNewWorkoutButton>
       )}

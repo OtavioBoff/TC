@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import {
   Container,
+  CopyButton,
+  DownloadButton,
   EditButton,
   Header,
   RemoveButton,
@@ -10,34 +12,58 @@ import {
 } from "./styles";
 import { RegisterWorkoutContext } from "../../../../contexts/workoutContext";
 import { BiEdit } from "react-icons/bi";
-import { PiTrash } from "react-icons/pi";
+import { PiDownloadSimple, PiTrash } from "react-icons/pi";
+import { MdCopyAll } from "react-icons/md";
 
 interface WorkoutBoxProps {
-  workoutIndex: number;
-  openWorkout: (workoutIndex: number, groupIndex: number) => void;
-  openWorkoutToEdit: (workoutIndex: number) => void;
-  deleteWorkout: (workoutIndex: number) => void;
+  workoutsIndex: number;
+  openWorkout: (workoutsIndex: number, groupIndex: number) => void;
+  openWorkoutToEdit: (workoutsIndex: number) => void;
+  deleteWorkout: (workoutsIndex: number) => void;
+  copyWorkout: (workoutsIndex: number) => void;
+  downloadWorkout: (workoutsIndex: number) => void;
 }
 
 export function WorkoutBox({
-  workoutIndex,
+  workoutsIndex,
   openWorkout,
   openWorkoutToEdit,
   deleteWorkout,
+  copyWorkout,
+  downloadWorkout,
 }: WorkoutBoxProps) {
   const { workouts } = useContext(RegisterWorkoutContext);
 
   return (
-    <Container onClick={() => openWorkout(workoutIndex, 0)}>
+    <Container onClick={() => openWorkout(workoutsIndex, 0)}>
       <Header>
-        <WorkoutName>{workouts[workoutIndex].name}</WorkoutName>
+        <WorkoutName>{workouts[workoutsIndex].name}</WorkoutName>
         <div>
+          <DownloadButton
+            title="Baixar"
+            onClick={(e) => {
+              e.stopPropagation();
+              downloadWorkout(workoutsIndex);
+            }}
+          >
+            <PiDownloadSimple size={24} />
+          </DownloadButton>
+          <CopyButton
+            to="/new-workout"
+            title="Copiar"
+            onClick={(e) => {
+              e.stopPropagation();
+              copyWorkout(workoutsIndex);
+            }}
+          >
+            <MdCopyAll size={24} />
+          </CopyButton>
           <EditButton
             to="/new-workout"
             title="Editar"
             onClick={(e) => {
               e.stopPropagation();
-              openWorkoutToEdit(workoutIndex);
+              openWorkoutToEdit(workoutsIndex);
             }}
           >
             <BiEdit size={24} />
@@ -46,7 +72,7 @@ export function WorkoutBox({
             title="Excluir"
             onClick={(e) => {
               e.stopPropagation();
-              deleteWorkout(workoutIndex);
+              deleteWorkout(workoutsIndex);
             }}
           >
             <PiTrash size={24} />
@@ -54,12 +80,12 @@ export function WorkoutBox({
         </div>
       </Header>
       <WorkoutGroup>
-        {workouts[workoutIndex].workout.map((item, index) => (
+        {workouts[workoutsIndex].workout.map((item, index) => (
           <WorkoutGroupName
             key={index}
             onClick={(e) => {
               e.stopPropagation();
-              openWorkout(workoutIndex, index);
+              openWorkout(workoutsIndex, index);
             }}
           >
             {item.group}

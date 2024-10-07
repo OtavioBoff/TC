@@ -32,11 +32,11 @@ export const Container = styled(clickableBoxBase)`
     &:hover {
       background: ${theme.gray600};
     }
-    &:hover ${EditButton} {
+    &:hover ${baseButtonNavLink} {
       opacity: 1;
       pointer-events: auto;
     }
-    &:hover ${RemoveButton} {
+    &:hover ${baseButton} {
       opacity: 1;
       pointer-events: auto;
     }
@@ -75,20 +75,32 @@ export const WorkoutGroup = styled.div`
   flex-wrap: wrap;
 `;
 
-export const EditButton = styled(NavLink)`
+const baseButtonNavLink = styled(NavLink)`
   ${({ theme }) => css`
     padding: 4px 8px;
     opacity: 0;
     pointer-events: none
     cursor: pointer;
     color: ${theme.gray300};
+  `}
+`;
+
+export const EditButton = styled(baseButtonNavLink)`
+  ${({ theme }) => css`
+    &:hover {
+      color: ${theme.green500};
+    }
+  `}
+`;
+export const CopyButton = styled(baseButtonNavLink)`
+  ${({ theme }) => css`
     &:hover {
       color: ${theme.green500};
     }
   `}
 `;
 
-export const RemoveButton = styled.button`
+const baseButton = styled.button`
   ${({ theme }) => css`
     padding: 4px 8px;
     opacity: 0;
@@ -97,8 +109,20 @@ export const RemoveButton = styled.button`
     border: none;
     cursor: pointer;
     color: ${theme.gray300};
+  `}
+`;
+
+export const RemoveButton = styled(baseButton)`
+  ${({ theme }) => css`
     &:hover {
       color: ${theme.red500};
+    }
+  `}
+`;
+export const DownloadButton = styled(baseButton)`
+  ${({ theme }) => css`
+    &:hover {
+      color: ${theme.green500};
     }
   `}
 `;

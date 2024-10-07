@@ -5,8 +5,8 @@ import { BiEdit } from "react-icons/bi";
 import { EditButton, RemoveButton } from "../styles";
 
 interface GenerateTableRowsProps {
-  workout: Workout[];
-  pageIndex: number;
+  tableWorkout: Workout[];
+  tablePageIndex: number;
   highestNumberOfSeriesInTheGroup: number;
   isEditable: boolean;
   onEditExercise: (exerciseNumber: number) => void;
@@ -14,15 +14,15 @@ interface GenerateTableRowsProps {
 }
 
 export const generateTableRows = ({
-  workout,
-  pageIndex,
+  tableWorkout,
+  tablePageIndex,
   highestNumberOfSeriesInTheGroup,
   isEditable,
   onEditExercise,
   removeExercise,
 }: GenerateTableRowsProps) => {
   return Array.from(
-    { length: workout[pageIndex]?.exercisesProps.length },
+    { length: tableWorkout[tablePageIndex]?.exercisesProps.length },
     (_, exerciseNumber) => (
       <tr key={exerciseNumber}>
         {isEditable && (
@@ -61,31 +61,33 @@ export const generateTableRows = ({
         )}
         <td>
           <span>
-            {workout[pageIndex].exercisesProps[exerciseNumber]?.muscle || "-"}
+            {tableWorkout[tablePageIndex].exercisesProps[exerciseNumber]
+              ?.muscle || "-"}
           </span>
         </td>
         <td>
           <span>
-            {workout[pageIndex].exercisesProps[exerciseNumber]?.exercise || "-"}
+            {tableWorkout[tablePageIndex].exercisesProps[exerciseNumber]
+              ?.exercise || "-"}
           </span>
         </td>
         <td>
           <span>
-            {workout[pageIndex].exercisesProps[exerciseNumber]?.observation ||
-              "-"}
+            {tableWorkout[tablePageIndex].exercisesProps[exerciseNumber]
+              ?.observation || "-"}
           </span>
         </td>
         <td>
           <span>
-            {workout[pageIndex].exercisesProps[exerciseNumber]?.seriesProps
-              .props.length || "-"}
+            {tableWorkout[tablePageIndex].exercisesProps[exerciseNumber]
+              ?.seriesProps.props.length || "-"}
           </span>
         </td>
         {generateTableRowsForRepsAndWeight(
           highestNumberOfSeriesInTheGroup,
           exerciseNumber,
-          workout,
-          pageIndex
+          tableWorkout,
+          tablePageIndex
         )}
       </tr>
     )

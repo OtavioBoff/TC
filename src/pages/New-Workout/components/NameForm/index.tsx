@@ -16,9 +16,8 @@ export function NameForm({
   toEdit,
   nameRequiredTo,
 }: WorkoutNameFormProps) {
-  const { workouts, workoutIndex, workout, pageIndex } = useContext(
-    RegisterWorkoutContext
-  );
+  const { workouts, workoutsIndex, workout, pageIndex, isEditingWorkout } =
+    useContext(RegisterWorkoutContext);
   const { handleSubmit, register } = useForm<Workouts>();
 
   const renderInputField = () => {
@@ -28,7 +27,7 @@ export function NameForm({
           <Input
             placeholder="Nome do treino"
             {...register("name", { required: true })}
-            defaultValue={toEdit ? workouts[workoutIndex]?.name : ""}
+            defaultValue={isEditingWorkout ? workouts[workoutsIndex]?.name : ""}
           />
         );
 
