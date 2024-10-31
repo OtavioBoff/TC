@@ -1,0 +1,54 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  createdIn DateTime  @default(now())
+  workouts  Workout[]
+}
+
+model Workout {
+  id     Int     @id @default(autoincrement())
+  name   String
+  groups Group[]
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Group {
+  id        Int        @id @default(autoincrement())
+  name      String
+  exercises Exercise[]
+
+  workoutId Int
+  workout   Workout @relation(fields: [workoutId], references: [id])
+}
+
+model Exercise {
+  id          Int      @id @default(autoincrement())
+  muscle      String
+  exercise    String
+  observation String?
+  series      Series[]
+
+  groupId Int
+  group   Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model Series {
+  id     Int    @id @default(autoincrement())
+  reps   Int?
+  weight Float?
+
+  exerciseId Int
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+}
