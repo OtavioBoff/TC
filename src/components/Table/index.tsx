@@ -11,20 +11,22 @@ import {
   TableArrows,
   WorkoutGroup,
 } from "./styles";
-import { generateTableRows } from "./TableRow";
+import { GenerateTableBody } from "./TableRow";
 import { PiCaretLeft, PiCaretRight, PiTrash } from "react-icons/pi";
-import { BiEdit } from "react-icons/bi";
+import { BiEdit, BiPlus } from "react-icons/bi";
 import { Workout } from "../../@types";
 import { RegisterWorkoutContext } from "../../contexts/workoutContext";
+import { AddButton } from "./styles";
 
-export interface TableProps {
+interface TableProps {
   workout: Workout[];
   workoutPageIndex?: number;
   isEditable?: boolean;
-  OnPageNumberChange?: (currentPageNumber: number) => void;
+  onPageNumberChange?: (currentPageNumber: number) => void;
   OnEditExercise?: (exerciseNumber: number) => void;
   OnEditGroupName?: () => void;
   OnNextPageIsNew?: () => void;
+  OnNewExercise?: () => void;
   editRemoveWord?: string;
   muscleWord?: string;
   exerciseWord?: string;
@@ -38,10 +40,11 @@ export function Table({
   workout,
   workoutPageIndex = 0,
   isEditable = false,
+  OnNewExercise,
   OnNextPageIsNew,
   OnEditExercise,
   OnEditGroupName,
-  OnPageNumberChange,
+  onPageNumberChange,
   editRemoveWord = "Editar\n\nExcluir",
   muscleWord = "Músculo",
   exerciseWord = "Exercícios",
@@ -61,8 +64,8 @@ export function Table({
   }, [workout]);
 
   useEffect(() => {
-    OnPageNumberChange?.(tablePageIndex);
-  }, [tablePageIndex, tableWorkout, OnPageNumberChange]);
+    onPageNumberChange?.(tablePageIndex);
+  }, [tablePageIndex, tableWorkout, onPageNumberChange]);
 
   if (tableWorkout.length === 0) {
     return (
@@ -104,7 +107,9 @@ export function Table({
   }
 
   function onEditExercise(exerciseNumber: number) {
-    OnEditExercise?.(exerciseNumber);
+    if (OnEditExercise) {
+      OnEditExercise(exerciseNumber);
+    }
   }
 
   function removeExercise(exerciseNumber: number) {
@@ -147,6 +152,10 @@ export function Table({
     setWorkout(updatedWorkout);
   };
 
+  const onNewExercise = () => {
+    OnNewExercise?.();
+  };
+
   return (
     <Container>
       <Content>
@@ -154,13 +163,19 @@ export function Table({
           <PiCaretLeft size={32} />
         </TableArrows>
         <MiddleContent>
-          <table>
+          <table
+            style={
+              tableWorkout[tablePageIndex]?.exercisesProps.length == 0
+                ? { background: "transparent" }
+                : {}
+            }
+          >
             <caption>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <WorkoutGroup>
                   {tableWorkout[tablePageIndex]?.group}
                 </WorkoutGroup>
-                {isEditable && (
+                {isEditable && tableWorkout[tablePageIndex].group != "" && (
                   <EditButton
                     title="Editar nome do grupo"
                     onClick={handleEditGroupName}
@@ -192,24 +207,30 @@ export function Table({
                 </tr>
               )}
             </thead>
-            <tbody>
-              {tableWorkout[tablePageIndex]?.exercisesProps.length == 0 ? (
-                <tr>
-                  <td>
+            {tableWorkout[tablePageIndex]?.exercisesProps.length == 0 ? (
+              <tbody>
+                <tr className="emptyPage">
+                  <td className="emptyPage" style={{ border: "0px" }}>
                     <EmptyPage>{"Pagina vazia"}</EmptyPage>
                   </td>
                 </tr>
-              ) : (
-                generateTableRows({
-                  tableWorkout,
-                  tablePageIndex,
-                  highestNumberOfSeriesInTheGroup,
-                  isEditable,
-                  onEditExercise,
-                  removeExercise,
-                })
-              )}
-            </tbody>
+                <AddButton onClick={onNewExercise}>
+                  <BiPlus size={32} />
+                </AddButton>
+              </tbody>
+            ) : (
+              <GenerateTableBody
+                tableWorkout={tableWorkout}
+                tablePageIndex={tablePageIndex}
+                highestNumberOfSeriesInTheGroup={
+                  highestNumberOfSeriesInTheGroup
+                }
+                isEditable={isEditable}
+                onEditExercise={onEditExercise}
+                removeExercise={removeExercise}
+                onNewExercise={onNewExercise}
+              />
+            )}
           </table>
         </MiddleContent>
         <TableArrows onClick={handleNextPage} onKeyDown={handleKeyDown}>

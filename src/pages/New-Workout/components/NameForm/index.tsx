@@ -36,7 +36,9 @@ export function NameForm({
           <Input
             placeholder="Nome do grupamento"
             {...register("name", { required: true })}
-            defaultValue={toEdit ? workout[pageIndex]?.group : ""}
+            defaultValue={
+              toEdit ? workout[pageIndex]?.group : "Novo grupamento"
+            }
           />
         );
 
@@ -48,7 +50,7 @@ export function NameForm({
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
       {renderInputField()}
-      <SubmitButton type="submit">submit</SubmitButton>
+      <SubmitButton type="submit">Salvar</SubmitButton>
     </FormContainer>
   );
 }

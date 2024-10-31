@@ -12,6 +12,7 @@ import { ExercisesProps } from "../../../../@types";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useContext } from "react";
 import { RegisterWorkoutContext } from "../../../../contexts/workoutContext";
+import { v4 } from "uuid";
 
 export interface NewExerciseForm {
   exerciseProps: ExercisesProps;
@@ -34,10 +35,7 @@ export function ExerciseForm({
 
   const { register, handleSubmit, watch, control } = newRowForm;
 
-  const numberOfExerciseToId = workout.reduce((sum, currentWorkout) => {
-    const numberOfExercises = currentWorkout.exercisesProps.length;
-    return sum + numberOfExercises;
-  }, 0);
+  const uid = v4();
 
   useFieldArray({
     control,
@@ -96,11 +94,7 @@ export function ExerciseForm({
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <MiddleContainer>
-        <input
-          type="hidden"
-          {...register("exerciseProps.id")}
-          value={`ex${numberOfExerciseToId + 1}`}
-        />
+        <input type="hidden" {...register("exerciseProps.id")} value={uid} />
         <InputsContainer>
           <InputsBox>
             <label>Músculo</label>
@@ -165,7 +159,9 @@ export function ExerciseForm({
           </div>
         </InputsContainer>
       </MiddleContainer>
-      <SubmitButton type="submit">Submit</SubmitButton>
+      <SubmitButton type="submit">
+        {toEdit ? "Salvar" : "Adicionar Exercício"}
+      </SubmitButton>
     </FormContainer>
   );
 }

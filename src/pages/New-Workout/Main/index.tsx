@@ -1,10 +1,5 @@
 import { ExerciseForm, NewExerciseForm } from "../components/ExerciseForm";
-import {
-  AddButton,
-  Container,
-  CreateNewWorkoutButton,
-  SubmitButton,
-} from "./styles";
+import { Container, CreateNewWorkoutButton, SubmitButton } from "./styles";
 import { Table } from "../../../components/Table";
 import { Modal } from "../../../components/Modal";
 
@@ -12,7 +7,6 @@ import { useContext, useEffect, useState } from "react";
 import { NameForm } from "../components/NameForm";
 import { RegisterWorkoutContext } from "../../../contexts/workoutContext";
 import { Workouts } from "../../../@types";
-import { BiPlus } from "react-icons/bi";
 
 export function NewWorkout() {
   const {
@@ -208,20 +202,18 @@ export function NewWorkout() {
           <Table
             workout={workout}
             workoutPageIndex={pageIndex}
-            OnPageNumberChange={OnPageNumberChange}
+            onPageNumberChange={OnPageNumberChange}
             OnNextPageIsNew={handleNewPage}
             isEditable={true}
             OnEditExercise={OnEditExercise}
             OnEditGroupName={OnEditGroupName}
+            OnNewExercise={handleNewExercise}
           />
 
           <Modal isVisible={isModalVisible} onClose={closeModal}>
             {renderModalField()}
           </Modal>
           <footer>
-            <AddButton onClick={handleNewExercise}>
-              <BiPlus size={32} />
-            </AddButton>
             <SubmitButton
               disabled={isDisableSubmitButton}
               onClick={handleWorkoutName}

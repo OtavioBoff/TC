@@ -1,95 +1,140 @@
 import { generateTableRowsForRepsAndWeight } from "./TableRowRepsWeight";
 import { Workout } from "../../../@types";
 import { PiTrash } from "react-icons/pi";
-import { BiEdit } from "react-icons/bi";
-import { EditButton, RemoveButton } from "../styles";
+import { BiEdit, BiPlus } from "react-icons/bi";
+import { AddButton, EditButton, RemoveButton } from "../styles";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "@hello-pangea/dnd";
+import { useContext } from "react";
+import { RegisterWorkoutContext } from "../../../contexts/workoutContext";
+import { TableRow } from "./styles";
 
-interface GenerateTableRowsProps {
+interface GenerateTableBodyProps {
   tableWorkout: Workout[];
   tablePageIndex: number;
   highestNumberOfSeriesInTheGroup: number;
   isEditable: boolean;
   onEditExercise: (exerciseNumber: number) => void;
+  onNewExercise: () => void;
   removeExercise: (exerciseNumber: number) => void;
 }
 
-export const generateTableRows = ({
+export function GenerateTableBody({
   tableWorkout,
   tablePageIndex,
   highestNumberOfSeriesInTheGroup,
   isEditable,
   onEditExercise,
+  onNewExercise,
   removeExercise,
-}: GenerateTableRowsProps) => {
-  return Array.from(
-    { length: tableWorkout[tablePageIndex]?.exercisesProps.length },
-    (_, exerciseNumber) => (
-      <tr key={exerciseNumber}>
-        {isEditable && (
-          <td
-            style={{
-              width: "100px",
-            }}
-          >
-            <div
+}: GenerateTableBodyProps) {
+  const { setWorkout } = useContext(RegisterWorkoutContext);
+
+  const handleDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+
+    // Verifica se houve uma mudança de posição
+    if (!destination || destination.index === source.index) return;
+
+    // Realoca o exercício para a nova posição dentro do mesmo grupo
+    const reorderedExercises = [...tableWorkout[tablePageIndex].exercisesProps];
+    const [removed] = reorderedExercises.splice(source.index, 1);
+    reorderedExercises.splice(destination.index, 0, removed);
+
+    const updatedWorkout = [...tableWorkout];
+    updatedWorkout[tablePageIndex] = {
+      ...updatedWorkout[tablePageIndex],
+      exercisesProps: reorderedExercises,
+    };
+
+    setWorkout(updatedWorkout);
+  };
+
+  return (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Droppable droppableId="exercise-list" type="EXERCISE">
+        {(provided) => (
+          <tbody ref={provided.innerRef} {...provided.droppableProps}>
+            {tableWorkout[tablePageIndex]?.exercisesProps.map(
+              (exercise, index) => (
+                <Draggable
+                  key={`exercise-${index}`}
+                  draggableId={`exercise-${index}`}
+                  index={index}
+                  isDragDisabled={!isEditable} // Desativa o arrasto quando `isEditable` é false
+                >
+                  {(provided) => (
+                    <TableRow
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      {isEditable && (
+                        <td>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.5rem",
+                            }}
+                          >
+                            <EditButton
+                              title="Editar"
+                              onClick={() => onEditExercise(index)}
+                            >
+                              <BiEdit size={24} />
+                            </EditButton>
+                            <RemoveButton
+                              title="Excluir"
+                              onClick={() => removeExercise(index)}
+                            >
+                              <PiTrash size={24} />
+                            </RemoveButton>
+                          </div>
+                        </td>
+                      )}
+                      <td>
+                        <span>{exercise.muscle || "-"}</span>
+                      </td>
+                      <td>
+                        <span>{exercise.exercise || "-"}</span>
+                      </td>
+                      <td>
+                        <span>{exercise.observation || "-"}</span>
+                      </td>
+                      <td>
+                        <span>{exercise.seriesProps.props.length || "-"}</span>
+                      </td>
+                      {generateTableRowsForRepsAndWeight(
+                        highestNumberOfSeriesInTheGroup,
+                        index,
+                        tableWorkout,
+                        tablePageIndex
+                      )}
+                    </TableRow>
+                  )}
+                </Draggable>
+              )
+            )}
+            {provided.placeholder}
+            <AddButton
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "0.5rem",
-                height: "100%",
+                borderTopLeftRadius: "0px",
+                borderTopRightRadius: "0px",
+                borderTop: "0px",
+                flexGrow: "0",
               }}
+              onClick={onNewExercise}
             >
-              <EditButton
-                title="Editar"
-                onClick={() => {
-                  onEditExercise(exerciseNumber);
-                }}
-              >
-                <BiEdit size={24} />
-              </EditButton>
-              <RemoveButton
-                title="Excluir"
-                onClick={() => {
-                  removeExercise(exerciseNumber);
-                }}
-              >
-                <PiTrash size={24} />
-              </RemoveButton>
-            </div>
-          </td>
+              <BiPlus size={32} />
+            </AddButton>
+          </tbody>
         )}
-        <td>
-          <span>
-            {tableWorkout[tablePageIndex].exercisesProps[exerciseNumber]
-              ?.muscle || "-"}
-          </span>
-        </td>
-        <td>
-          <span>
-            {tableWorkout[tablePageIndex].exercisesProps[exerciseNumber]
-              ?.exercise || "-"}
-          </span>
-        </td>
-        <td>
-          <span>
-            {tableWorkout[tablePageIndex].exercisesProps[exerciseNumber]
-              ?.observation || "-"}
-          </span>
-        </td>
-        <td>
-          <span>
-            {tableWorkout[tablePageIndex].exercisesProps[exerciseNumber]
-              ?.seriesProps.props.length || "-"}
-          </span>
-        </td>
-        {generateTableRowsForRepsAndWeight(
-          highestNumberOfSeriesInTheGroup,
-          exerciseNumber,
-          tableWorkout,
-          tablePageIndex
-        )}
-      </tr>
-    )
+      </Droppable>
+    </DragDropContext>
   );
-};
+}

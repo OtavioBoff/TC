@@ -18,6 +18,7 @@ export const MiddleContent = styled.div`
     height: auto;
     justify-content: space-between;
     overflow: auto;
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -51,29 +52,34 @@ export const MiddleContent = styled.div`
       tbody {
         tr {
           transition: background-color 0.1s ease;
+          
           td {
             padding: 0.75rem 1rem;
             border-top: 1px solid ${theme.gray300};
             border-bottom: 1px solid ${theme.gray300};
-
-            &:first-child {
-              border-left: none;
-            }
-
-            &:last-child {
-              border-right: none;
-            }
           }
-          &:hover {
-            color: ${theme.white};
-            background-color: ${theme.gray500};
+
+          &:first-child {
+            border-left: none;
           }
+
+          &:last-child {
+            border-right: none;
+          }
+        }
         }
       }
       tbody tr:last-child {
         td {
           border-bottom: none;
         }
+      }
+    }
+    .emptyPage {
+      border: 0px;
+      &:hover {
+        color: ${theme.gray100};
+        background-color: ${theme.gray800}; 
       }
     }
   `}
@@ -156,5 +162,23 @@ export const EmptyPage = styled(baseSpan)`
     font-size: 2rem;
     text-align: center;
     height: 100%;
+  `}
+`;
+
+export const AddButton = styled(baseButton)`
+  ${({ theme }) => css`
+    background: transparent;
+    width: 100%;
+    border-radius: 8px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: ${theme.green500};
+    border: 3px dashed ${theme.green700};
+    &:hover {
+      background: ${theme.green700};
+      color: ${theme.white};
+      border-color: ${theme.green700};
+    }
   `}
 `;
