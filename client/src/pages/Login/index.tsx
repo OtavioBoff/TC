@@ -1,8 +1,17 @@
 // import Test from "../../test";
 import { Container } from "./styles";
 // import { Link } from "react-router-dom";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 export function Login() {
+  const handleLoginSuccess = (response: CredentialResponse) => {
+    console.log(response);
+    // Acesse response.credential para obter o token
+  };
+
+  const handleLoginFailure = () => {
+    console.error("Login falhou");
+  };
   return (
     <Container>
       {/* <form action="">
@@ -23,6 +32,10 @@ export function Login() {
         </button>
       </Link> */}
       {/* <Test /> */}
+      <GoogleLogin
+        onSuccess={handleLoginSuccess}
+        onError={handleLoginFailure}
+      />
     </Container>
   );
 }

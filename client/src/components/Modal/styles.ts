@@ -25,7 +25,7 @@ export const Content = styled.div`
     align-items: center;
 
     width: 90%;
-    min-height: 50vh;
+    min-height: 60vh;
     max-height: 90vh;
 
     padding: 2rem;

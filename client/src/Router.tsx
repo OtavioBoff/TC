@@ -11,7 +11,7 @@ export function Router() {
     <Routes>
       <Route path="/" element={<DefaultLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/new-workout" element={<NewWorkout />} />
+        <Route path="/create" element={<NewWorkout />} />
       </Route>
       <Route path="/" element={<LoginLayout />}>
         <Route path="/login" element={<Login />} />

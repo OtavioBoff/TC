@@ -126,3 +126,10 @@ export const DownloadButton = styled(baseButton)`
     }
   `}
 `;
+export const ShareButton = styled(baseButton)`
+  ${({ theme }) => css`
+    &:hover {
+      color: ${theme.green500};
+    }
+  `}
+`;

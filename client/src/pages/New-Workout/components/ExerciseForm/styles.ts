@@ -36,7 +36,7 @@ export const InputsBox = styled.div`
   width: 100%;
   label {
     text-align: center;
-    font-size: 2rem;
+    font-size: 1rem;
   }
 `;
 
@@ -51,7 +51,7 @@ const baseInput = styled.input`
     background: ${theme.gray300};
     text-align: center;
     align-items: center;
-    font-size: 1.5rem;
+    font-size: 1rem;
   `}
 `;
 
@@ -75,7 +75,7 @@ export const TextAreaInput = styled.textarea`
     background: ${theme.gray300};
     text-align: center;
     align-items: center;
-    font-size: 1.5rem;
+    font-size: 1rem;
     resize: none;
     overflow: hidden;
   `}

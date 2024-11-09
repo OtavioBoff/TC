@@ -29,7 +29,7 @@ export function ExerciseForm({
   toEdit,
   numberOfExerciseToEdit,
 }: ExerciseFormProps) {
-  const { workout, pageIndex } = useContext(RegisterWorkoutContext);
+  const { group, pageIndex } = useContext(RegisterWorkoutContext);
 
   const newRowForm = useForm<NewExerciseForm>({});
 
@@ -46,8 +46,7 @@ export function ExerciseForm({
     watch("exerciseProps.seriesProps.num") !== undefined
       ? watch("exerciseProps.seriesProps.num")
       : toEdit
-      ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit].seriesProps
-          .num
+      ? group[pageIndex].exercisesProps[numberOfExerciseToEdit].seriesProps.num
       : 1;
 
   const generateToRepsAndWeight = (numberOfSeries: number) => {
@@ -65,7 +64,7 @@ export function ExerciseForm({
               })}
               defaultValue={
                 toEdit
-                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                  ? group[pageIndex].exercisesProps[numberOfExerciseToEdit]
                       .seriesProps?.props[index]?.reps
                   : 0
               }
@@ -81,7 +80,7 @@ export function ExerciseForm({
               })}
               defaultValue={
                 toEdit
-                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                  ? group[pageIndex].exercisesProps[numberOfExerciseToEdit]
                       .seriesProps?.props[index]?.weight
                   : 0
               }
@@ -96,37 +95,39 @@ export function ExerciseForm({
       <MiddleContainer>
         <input type="hidden" {...register("exerciseProps.id")} value={uid} />
         <InputsContainer>
-          <InputsBox>
-            <label>Músculo</label>
-            <TextInput
-              {...register("exerciseProps.muscle")}
-              defaultValue={
-                toEdit
-                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
-                      .muscle
-                  : ""
-              }
-            />
-          </InputsBox>
-          <InputsBox>
-            <label>Exercício</label>
-            <TextInput
-              {...register("exerciseProps.exercise")}
-              defaultValue={
-                toEdit
-                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
-                      .exercise
-                  : ""
-              }
-            />
-          </InputsBox>
+          <div>
+            <InputsBox>
+              <label>Músculo</label>
+              <TextInput
+                {...register("exerciseProps.muscle")}
+                defaultValue={
+                  toEdit
+                    ? group[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                        .muscle
+                    : ""
+                }
+              />
+            </InputsBox>
+            <InputsBox>
+              <label>Exercício</label>
+              <TextInput
+                {...register("exerciseProps.exercise")}
+                defaultValue={
+                  toEdit
+                    ? group[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                        .exercise
+                    : ""
+                }
+              />
+            </InputsBox>
+          </div>
           <InputsBox>
             <label>Observações</label>
             <TextAreaInput
               {...register("exerciseProps.observation")}
               defaultValue={
                 toEdit
-                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                  ? group[pageIndex].exercisesProps[numberOfExerciseToEdit]
                       .observation
                   : ""
               }
@@ -144,7 +145,7 @@ export function ExerciseForm({
               })}
               defaultValue={
                 toEdit
-                  ? workout[pageIndex].exercisesProps[numberOfExerciseToEdit]
+                  ? group[pageIndex].exercisesProps[numberOfExerciseToEdit]
                       .seriesProps.num
                   : 0
               }

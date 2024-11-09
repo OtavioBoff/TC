@@ -1,8 +1,13 @@
 import { GenerateTableRowsForRepsAndWeight } from "../GenerateTableRowsForRepsAndWeight";
-import { Workout } from "../../../../@types";
+import { Group } from "../../../../@types";
 import { PiTrash } from "react-icons/pi";
 import { BiEdit, BiPlus } from "react-icons/bi";
-import { AddButton, EditButton, RemoveButton } from "../../styles";
+import {
+  AddButtonCell,
+  AddButtonRow,
+  EditButton,
+  RemoveButton,
+} from "../../styles";
 import {
   DragDropContext,
   Droppable,
@@ -14,7 +19,7 @@ import { RegisterWorkoutContext } from "../../../../contexts/workoutContext";
 import { TableRow } from "./styles";
 
 interface GenerateTableBodyProps {
-  tableWorkout: Workout[];
+  tableWorkout: Group[];
   tablePageIndex: number;
   highestNumberOfSeriesInTheGroup: number;
   isEditable: boolean;
@@ -32,7 +37,7 @@ export function GenerateTableBody({
   onNewExercise,
   removeExercise,
 }: GenerateTableBodyProps) {
-  const { setWorkout } = useContext(RegisterWorkoutContext);
+  const { setGroup } = useContext(RegisterWorkoutContext);
 
   const handleDragEnd = (result: DropResult) => {
     const { destination, source } = result;
@@ -51,7 +56,7 @@ export function GenerateTableBody({
       exercisesProps: reorderedExercises,
     };
 
-    setWorkout(updatedWorkout);
+    setGroup(updatedWorkout);
   };
 
   return (
@@ -73,12 +78,32 @@ export function GenerateTableBody({
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
+                      <td>
+                        <span>{exercise.muscle || "-"}</span>
+                      </td>
+                      <td>
+                        <span>{exercise.exercise || "-"}</span>
+                      </td>
+                      <td>
+                        <span>{exercise.observation || "-"}</span>
+                      </td>
+                      <td>
+                        <span>{exercise.seriesProps.props.length || "-"}</span>
+                      </td>
+                      <GenerateTableRowsForRepsAndWeight
+                        highestNumberOfSeriesInTheGroup={
+                          highestNumberOfSeriesInTheGroup
+                        }
+                        exerciseNum={index}
+                        group={tableWorkout}
+                        pageIndex={tablePageIndex}
+                      />
                       {isEditable && (
                         <td>
                           <div
                             style={{
                               display: "flex",
-                              alignItems: "center",
+                              justifyContent: "center",
                               gap: "0.5rem",
                             }}
                           >
@@ -97,32 +122,6 @@ export function GenerateTableBody({
                           </div>
                         </td>
                       )}
-                      <td>
-                        <span>{exercise.muscle || "-"}</span>
-                      </td>
-                      <td>
-                        <span>{exercise.exercise || "-"}</span>
-                      </td>
-                      <td>
-                        <span>{exercise.observation || "-"}</span>
-                      </td>
-                      <td>
-                        <span>{exercise.seriesProps.props.length || "-"}</span>
-                      </td>
-                      {/* {generateTableRowsForRepsAndWeight(
-                        highestNumberOfSeriesInTheGroup,
-                        index,
-                        tableWorkout,
-                        tablePageIndex
-                      )} */}
-                      <GenerateTableRowsForRepsAndWeight
-                        highestNumberOfSeriesInTheGroup={
-                          highestNumberOfSeriesInTheGroup
-                        }
-                        exerciseNum={index}
-                        workout={tableWorkout}
-                        pageIndex={tablePageIndex}
-                      />
                     </TableRow>
                   )}
                 </Draggable>
@@ -130,19 +129,11 @@ export function GenerateTableBody({
             )}
             {provided.placeholder}
             {isEditable && (
-              <td colSpan={29}>
-                <AddButton
-                  style={{
-                    borderTopLeftRadius: "0px",
-                    borderTopRightRadius: "0px",
-                    borderTop: "0px",
-                    flexGrow: "0",
-                  }}
-                  onClick={onNewExercise}
-                >
+              <AddButtonRow onClick={onNewExercise}>
+                <AddButtonCell colSpan={29}>
                   <BiPlus size={32} />
-                </AddButton>
-              </td>
+                </AddButtonCell>
+              </AddButtonRow>
             )}
           </tbody>
         )}

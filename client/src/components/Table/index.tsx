@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
+  AddButtonCell,
   Container,
   Content,
   EditButton,
@@ -13,13 +14,13 @@ import {
 } from "./styles";
 import { PiCaretLeft, PiCaretRight, PiTrash } from "react-icons/pi";
 import { BiEdit, BiPlus } from "react-icons/bi";
-import { Workout } from "../../@types";
+import { Group } from "../../@types";
 import { RegisterWorkoutContext } from "../../contexts/workoutContext";
-import { AddButton } from "./styles";
+import { AddButtonRow } from "./styles";
 import { GenerateTableBody } from "./components/GenerateTableBody";
 
 interface TableProps {
-  workout: Workout[];
+  group: Group[];
   workoutPageIndex?: number;
   isEditable?: boolean;
   onPageNumberChange?: (currentPageNumber: number) => void;
@@ -37,7 +38,7 @@ interface TableProps {
 }
 
 export function Table({
-  workout,
+  group,
   workoutPageIndex = 0,
   isEditable = false,
   OnNewExercise,
@@ -53,15 +54,15 @@ export function Table({
   repsWord = "Reps",
   weightWord = "Peso",
 }: TableProps) {
-  const { setWorkout } = useContext(RegisterWorkoutContext);
+  const { setGroup } = useContext(RegisterWorkoutContext);
 
-  const [tableWorkout, setTableWorkout] = useState<Workout[]>(workout);
+  const [tableWorkout, setTableWorkout] = useState<Group[]>(group);
   const [tablePageIndex, setTablePageIndex] =
     useState<number>(workoutPageIndex);
 
   useEffect(() => {
-    setTableWorkout(workout);
-  }, [workout]);
+    setTableWorkout(group);
+  }, [group]);
 
   useEffect(() => {
     onPageNumberChange?.(tablePageIndex);
@@ -125,7 +126,7 @@ export function Table({
     };
 
     setTableWorkout(updatedWorkout);
-    setWorkout(updatedWorkout);
+    setGroup(updatedWorkout);
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -149,7 +150,7 @@ export function Table({
     const updatedWorkout = [...tableWorkout];
     updatedWorkout.splice(tablePageIndex, 1);
     setTableWorkout(updatedWorkout);
-    setWorkout(updatedWorkout);
+    setGroup(updatedWorkout);
   };
 
   const onNewExercise = () => {
@@ -190,6 +191,11 @@ export function Table({
                 <></>
               ) : (
                 <tr>
+                  <th>{muscleWord}</th>
+                  <th>{exerciseWord}</th>
+                  <th>{observationWord}</th>
+                  <th>{seriesWord}</th>
+                  {NumberOfSeries(highestNumberOfSeriesInTheGroup)}
                   {isEditable && (
                     <th
                       style={{
@@ -199,11 +205,6 @@ export function Table({
                       {editRemoveWord}
                     </th>
                   )}
-                  <th>{muscleWord}</th>
-                  <th>{exerciseWord}</th>
-                  <th>{observationWord}</th>
-                  <th>{seriesWord}</th>
-                  {NumberOfSeries(highestNumberOfSeriesInTheGroup)}
                 </tr>
               )}
             </thead>
@@ -214,9 +215,11 @@ export function Table({
                     <EmptyPage>{"Pagina vazia"}</EmptyPage>
                   </td>
                 </tr>
-                <AddButton onClick={onNewExercise}>
-                  <BiPlus size={32} />
-                </AddButton>
+                <AddButtonRow onClick={onNewExercise}>
+                  <AddButtonCell colSpan={29}>
+                    <BiPlus size={32} />
+                  </AddButtonCell>
+                </AddButtonRow>
               </tbody>
             ) : (
               <GenerateTableBody

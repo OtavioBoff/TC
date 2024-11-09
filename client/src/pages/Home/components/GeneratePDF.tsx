@@ -4,15 +4,15 @@
 // import { RegisterWorkoutContext } from "../../../contexts/workoutContext";
 
 // export const GeneratePDF = () => {
-//   const { workouts, workoutsIndex } = useContext(RegisterWorkoutContext);
+//   const { workout, workoutsIndex } = useContext(RegisterWorkoutContext);
 
 //   const doc = new jsPDF();
 //   doc.setFontSize(12);
 
-//   doc.text(workouts[workoutsIndex].name, 14, 10);
+//   doc.text(workout[workoutsIndex].name, 14, 10);
 //   let currentY = 20;
 
-//   workouts[workoutsIndex].workout.forEach((group) => {
+//   workout[workoutsIndex].group.forEach((group) => {
 //     doc.text(group.group, 14, currentY);
 //     currentY += 10;
 
@@ -52,5 +52,5 @@
 //     });
 //   });
 
-//   doc.save("workout.pdf");
+//   doc.save("group.pdf");
 // };

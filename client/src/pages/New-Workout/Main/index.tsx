@@ -2,67 +2,67 @@ import { ExerciseForm, NewExerciseForm } from "../components/ExerciseForm";
 import { Container, CreateNewWorkoutButton, SubmitButton } from "./styles";
 import { Table } from "../../../components/Table";
 import { Modal } from "../../../components/Modal";
-
+import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { NameForm } from "../components/NameForm";
 import { RegisterWorkoutContext } from "../../../contexts/workoutContext";
-import { Workouts } from "../../../@types";
+import {
+  ExercisesProps,
+  Workout,
+  ExerciseBack,
+  GroupBack,
+  WorkoutBack,
+  Group,
+} from "../../../@types";
 
 export function NewWorkout() {
   const {
-    workout,
-    setWorkout,
+    group,
+    setGroup,
     workoutsIndex,
-    workouts,
-    setWorkouts,
+    workout,
     pageIndex,
     setPageIndex,
     setIsEditingWorkout,
     isEditingWorkout,
   } = useContext(RegisterWorkoutContext);
 
-  const isDisableSubmitButton: boolean = !workout[0]?.exercisesProps[0]
+  const isDisableSubmitButton: boolean = !group[0]?.exercisesProps[0]
     ? true
     : false;
 
   const [newGroupName, setNewGroupName] = useState(false);
-
   const [nameRequiredToEdit, setNameRequiredToEdit] = useState<
     "workout" | "group" | undefined
   >(undefined);
 
   const [isEdited, setIsEdited] = useState(false);
-
   const [numberOfExerciseToEdit, setNumberOfExerciseToEdit] = useState(0);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const openModal = () => setIsModalVisible(true);
-
   const closeModal = () => setIsModalVisible(false);
 
   const OnPageNumberChange = (currentPageNumber: number) => {
     setPageIndex(currentPageNumber);
-    if (currentPageNumber === workout.length - 1) {
+    if (currentPageNumber === group.length - 1) {
       handleNewPage();
     }
   };
 
   useEffect(() => {
-    setNewGroupName(!workout[pageIndex]?.group);
-  }, [pageIndex, workout]);
+    setNewGroupName(!group[pageIndex]?.group);
+  }, [pageIndex, group]);
 
   const handleNewPage = () => {
-    const hasEmptyPage = workout.some(
-      (page) => page.exercisesProps.length === 0
-    );
+    const hasEmptyPage = group.some((page) => page.exercisesProps.length === 0);
     if (hasEmptyPage) return;
 
-    const newGroup = {
+    const newWorkoutGroup: Group = {
       group: "Novo Grupamento",
       exercisesProps: [],
     };
-    setWorkout([...workout, newGroup]);
+    setGroup([...group, newWorkoutGroup]);
   };
 
   const handleNewWorkout = () => {
@@ -79,7 +79,7 @@ export function NewWorkout() {
   };
 
   const handleWorkoutName = () => {
-    if (workouts[workoutsIndex].name) setIsEdited(true);
+    if (workout.length > 0 && workout[workoutsIndex]?.name) setIsEdited(true);
     setNameRequiredToEdit("workout");
     openModal();
   };
@@ -102,52 +102,99 @@ export function NewWorkout() {
       },
     };
 
-    const updatedWorkout = [...workout];
+    const updatedGroup = [...group];
 
-    if (updatedWorkout.length === 0) {
-      updatedWorkout.push({
-        group: workout[pageIndex].group,
+    if (updatedGroup.length === 0) {
+      updatedGroup.push({
+        group: group[pageIndex].group,
         exercisesProps: [newExercise],
       });
     } else {
-      const group = updatedWorkout[pageIndex];
+      const currentGroup = updatedGroup[pageIndex];
 
       if (isEdited) {
-        group.exercisesProps = group.exercisesProps.map((exercise, index) => {
-          return index !== numberOfExerciseToEdit ? exercise : newExercise;
-        });
+        currentGroup.exercisesProps = currentGroup.exercisesProps.map(
+          (exercise: ExercisesProps, index: number) =>
+            index !== numberOfExerciseToEdit ? exercise : newExercise
+        );
         setIsEdited(false);
       } else {
-        group.exercisesProps.push(newExercise);
+        currentGroup.exercisesProps.push(newExercise);
       }
     }
 
-    setWorkout(updatedWorkout);
+    setGroup(updatedGroup);
 
     closeModal();
   };
 
-  const handleSubmit = ({ name }: Workouts) => {
-    const numberOfWorkouts = workout.reduce(
-      (max: number, _, index, workouts) => {
-        return workouts[index].exercisesProps.length != 0 ? max + 1 : max;
-      },
-      0
-    );
-    workout.splice(numberOfWorkouts, workout.length - numberOfWorkouts);
-    const newWorkout: Workouts = { name: name, workout: workout };
-    const updatedWorkouts = isEditingWorkout
-      ? workouts.map((w, index) => (index === workoutsIndex ? newWorkout : w))
-      : [...workouts, newWorkout];
-    setWorkouts(updatedWorkouts);
-    setWorkout([]);
-    setPageIndex(0);
-    closeModal();
+  const convertWorkoutToBackFormat = (
+    workoutToBack: Workout,
+    userId: number
+  ): WorkoutBack => {
+    const groups: GroupBack[] = workoutToBack.group.map((groupItem) => ({
+      id: groupItem.id,
+      name: groupItem.group,
+      exercises: groupItem.exercisesProps.map((exerciseItem) => ({
+        id: exerciseItem.id,
+        muscle: exerciseItem.muscle,
+        exercise: exerciseItem.exercise,
+        observation: exerciseItem.observation,
+        series: exerciseItem.seriesProps.props.map((seriesItem) => ({
+          id: seriesItem.id,
+          reps: seriesItem.reps,
+          weight: seriesItem.weight,
+          exerciseId: exerciseItem.id,
+          exercise: {} as ExerciseBack,
+        })),
+        groupId: groupItem.id,
+        group: {} as GroupBack,
+      })),
+      workoutId: 0,
+      workout: {} as WorkoutBack,
+    }));
+
+    const name = workoutToBack.name;
+
+    return {
+      id: 0,
+      name,
+      groups,
+      userId,
+    };
+  };
+
+  const handleSubmit = async (name: string) => {
+    const data: Workout = { name, group, id: 0 };
+    console.log(data);
+    const payload: WorkoutBack = convertWorkoutToBackFormat(data, 1); // Passar o userId correto
+    console.log("payload", payload);
+    try {
+      if (isEditingWorkout) {
+        const response = await axios.patch(
+          `http://localhost:4000/workouts/${workout[workoutsIndex].id}`,
+          payload
+        );
+        console.log("Workout updated successfully:", response.data);
+      } else {
+        const response = await axios.post(
+          "http://localhost:4000/workouts",
+          payload
+        );
+        console.log("Workout created successfully:", response.data);
+      }
+      setGroup([]);
+      setPageIndex(0);
+      closeModal();
+    } catch (error) {
+      console.error("Error creating workout:", error);
+    }
   };
 
   const OnEditExercise = (exerciseNumber: number) => {
     setIsEdited(true);
     setNumberOfExerciseToEdit(exerciseNumber);
+    setNameRequiredToEdit(undefined);
     openModal();
   };
 
@@ -157,14 +204,14 @@ export function NewWorkout() {
     openModal();
   };
 
-  const OnGroupNameChange = ({ name }: Workouts) => {
-    const updatedWorkout = workout.map((workoutItem, index) => {
+  const OnGroupNameChange = (name: string) => {
+    const updatedGroup = group.map((workoutItem, index) => {
       if (index === pageIndex) {
         return { ...workoutItem, group: name };
       }
       return workoutItem;
     });
-    setWorkout(updatedWorkout);
+    setGroup(updatedGroup);
     closeModal();
   };
 
@@ -201,10 +248,10 @@ export function NewWorkout() {
 
   return (
     <Container>
-      {!(workout.length === 0) ? (
+      {!(group.length === 0) ? (
         <>
           <Table
-            workout={workout}
+            group={group}
             workoutPageIndex={pageIndex}
             onPageNumberChange={OnPageNumberChange}
             OnNextPageIsNew={handleNewPage}

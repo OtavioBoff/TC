@@ -20,11 +20,5 @@ export const defaultTheme = {
   green800: "#004233", // Verde bem escuro
   green900: "#002d22", // Verde muito escuro
 
-  blue100: "#dcefff", // Azul muito claro (para fundos e estados de hover suaves)
-  blue300: "#73a6ff", // Azul claro (para bordas e detalhes)
-  blue500: "#0072ff", // Azul padrão (principal cor de botão e destaque)
-  blue700: "#0056b3", // Azul escuro (para focos, hover e estados ativos)
-  blue900: "#003d80", // Azul muito escuro (ideal para textos em cima de azuis claros)
-
   red500: "#f75a68", // Vermelho para indicar erros ou ações críticas
 } as const;

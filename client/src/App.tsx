@@ -3,41 +3,39 @@ import { defaultTheme } from "./styles/themes/default";
 import { BrowserRouter } from "react-router-dom";
 import { Router } from "./Router";
 import { GlobalStyle } from "./styles/global";
-import { useEffect, useState } from "react";
-import { Workout, Workouts } from "./@types";
+import { useState } from "react";
+import {
+  Workout,
+  Group,
+  // WorkoutBack,
+  // GroupBack,
+  // ExerciseBack,
+  // SeriesBack,
+} from "./@types";
 import { RegisterWorkoutContext } from "./contexts/workoutContext";
-import api from "./services/api"; // Importa o serviço de API
+// import api from "./services/api"; // Importa o serviço de API
+// import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export function App() {
+  const [group, setGroup] = useState<Group[]>([]);
   const [workout, setWorkout] = useState<Workout[]>([]);
-  const [workouts, setWorkouts] = useState<Workouts[]>([]);
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [workoutsIndex, setWorkoutsIndex] = useState<number>(0);
   const [workoutsPageIndex, setWorkoutsPageIndex] = useState<number>(0);
   const [isEditingWorkout, setIsEditingWorkout] = useState<boolean>(false);
 
-  // Função para buscar Workouts do backend
-  useEffect(() => {
-    api
-      .get("/")
-      .then((response) => {
-        if (response.data.length > 0 && response.data[0].workout) {
-          const workoutsData = response.data[0].workout;
-          console.log(workoutsData);
-        }
-      })
-      .catch((error) => console.error("Erro ao buscar workouts:", error));
-  }, []);
+  // Função para buscar workout do backend
 
   return (
+    // <GoogleOAuthProvider clientId="973083932552-tvpp83h5vcjo30ursb8m1so2q9ct6eel.apps.googleusercontent.com">
     <RegisterWorkoutContext.Provider
       value={{
-        workout,
-        setWorkout,
+        group,
+        setGroup,
         pageIndex,
         setPageIndex,
-        workouts,
-        setWorkouts,
+        workout,
+        setWorkout,
         workoutsIndex,
         setWorkoutsIndex,
         workoutsPageIndex,
@@ -53,5 +51,6 @@ export function App() {
         </BrowserRouter>
       </ThemeProvider>
     </RegisterWorkoutContext.Provider>
+    // </GoogleOAuthProvider>
   );
 }

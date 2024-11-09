@@ -1,27 +1,24 @@
 {
-  "name": "server",
+  "name": "a",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx tsc && node dist/index.js",
-    "migrate": "npx prisma migrate dev --name init && npx prisma generate",
-    "prisma": "npx prisma studio"
+    "dev": "npx ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "prisma": "^5.22.0"
+  },
   "devDependencies": {
-    "@prisma/client": "^5.21.1",
+    "@prisma/client": "^5.22.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
-    "express": "^4.21.1",
-    "prisma": "^5.21.1",
-    "ts-node-dev": "^2.0.0",
+    "@types/node": "^22.9.0",
     "typescript": "^5.6.3"
-  },
-  "dependencies": {
-    "cors": "^2.8.5"
-  },
-  "type": "module"
+  }
 }

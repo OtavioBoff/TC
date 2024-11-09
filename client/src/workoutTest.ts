@@ -1,9 +1,9 @@
-import { Workouts } from "./@types";
+import { workout } from "./@types";
 
-export const workoutsTest: Workouts[] = [
+export const workoutsTest: workout[] = [
   {
     name: "Treino de Força Total",
-    workout: [
+    group: [
       {
         group: "Peito e Ombros",
         exercisesProps: [
@@ -150,7 +150,7 @@ export const workoutsTest: Workouts[] = [
   },
   {
     name: "Treino de Hipertrofia",
-    workout: [
+    group: [
       {
         group: "Costas e Bíceps",
         exercisesProps: [
@@ -286,7 +286,7 @@ export const workoutsTest: Workouts[] = [
   },
   {
     name: "Treino de Resistência",
-    workout: [
+    group: [
       {
         group: "Peito e Tríceps",
         exercisesProps: [

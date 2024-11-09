@@ -1,16 +1,16 @@
 import { createContext } from "react";
-import { Workout, Workouts } from "../@types";
+import { Group, Workout } from "../@types";
 
 type RegisterWorkoutContextData = {
-  workouts: Workouts[];
-  setWorkouts: (data: Workouts[]) => void;
+  workout: Workout[];
+  setWorkout: (data: Workout[]) => void;
   workoutsIndex: number;
   setWorkoutsIndex: (data: number) => void;
   workoutsPageIndex: number;
   setWorkoutsPageIndex: (data: number) => void;
 
-  workout: Workout[];
-  setWorkout: (data: Workout[]) => void;
+  group: Group[];
+  setGroup: (data: Group[]) => void;
   pageIndex: number;
   setPageIndex: (data: number) => void;
 

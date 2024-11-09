@@ -6,7 +6,7 @@ export const SidebarContainer = styled.header`
     background: ${theme.gray900};
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 16px;
 
     nav {

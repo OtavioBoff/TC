@@ -17,8 +17,8 @@ export const MiddleContent = styled.div`
     width: 100%;
     height: auto;
     justify-content: space-between;
-    overflow: auto;
 
+    overflow: auto;
     table {
       width: 100%;
       border-collapse: collapse;
@@ -52,7 +52,7 @@ export const MiddleContent = styled.div`
       tbody {
         tr {
           transition: background-color 0.1s ease;
-          
+
           td {
             padding: 0.75rem 1rem;
             border-top: 1px solid ${theme.gray300};
@@ -67,19 +67,26 @@ export const MiddleContent = styled.div`
             border-right: none;
           }
         }
-        }
       }
-      tbody tr:last-child {
-        td {
-          border-bottom: none;
-        }
+    }
+    tbody tr:last-child {
+      td {
+        border: none;
+        width: 100%;
       }
+    }
+    tbody tr:last-child td:first-child {
+      border-bottom-left-radius: 8px;
+    }
+
+    tbody tr:last-child td:last-child {
+      border-bottom-right-radius: 8px;
     }
     .emptyPage {
       border: 0px;
       &:hover {
         color: ${theme.gray100};
-        background-color: ${theme.gray800}; 
+        background-color: ${theme.gray800};
       }
     }
   `}
@@ -165,20 +172,31 @@ export const EmptyPage = styled(baseSpan)`
   `}
 `;
 
-export const AddButton = styled(baseButton)`
+export const AddButtonRow = styled.tr`
   ${({ theme }) => css`
     background: transparent;
     width: 100%;
-    border-radius: 8px;
-    padding: 12px 24px;
     cursor: pointer;
     transition: all 0.3s ease;
-    color: ${theme.green500};
-    border: 3px dashed ${theme.green700};
+
     &:hover {
       background: ${theme.green700};
       color: ${theme.white};
-      border-color: ${theme.green700};
+    }
+  `}
+`;
+
+// Estilização para o <td> que contém o botão
+export const AddButtonCell = styled.td`
+  ${({ theme }) => css`
+    border: 0;
+    padding: 12px 24px; // Adicione o padding aqui para centralizar o conteúdo
+    text-align: center; // Centraliza o conteúdo dentro do <td>
+    color: ${theme.green500}; // Mantenha a cor aqui
+
+    &:hover {
+      background: ${theme.green700};
+      color: ${theme.white};
     }
   `}
 `;
