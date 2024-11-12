@@ -173,16 +173,11 @@ export const EmptyPage = styled(baseSpan)`
 `;
 
 export const AddButtonRow = styled.tr`
-  ${({ theme }) => css`
+  ${() => css`
     background: transparent;
     width: 100%;
     cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      background: ${theme.green700};
-      color: ${theme.white};
-    }
+    transition: all 0.125s ease;
   `}
 `;
 
@@ -192,11 +187,11 @@ export const AddButtonCell = styled.td`
     border: 0;
     padding: 12px 24px; // Adicione o padding aqui para centralizar o conteúdo
     text-align: center; // Centraliza o conteúdo dentro do <td>
-    color: ${theme.green500}; // Mantenha a cor aqui
+    color: ${theme.gray300}; // Mantenha a cor aqui
 
     &:hover {
-      background: ${theme.green700};
-      color: ${theme.white};
+      background: ${theme.gray700};
+      color: ${theme.green500}; // Mantenha a cor aqui
     }
   `}
 `;

@@ -1,40 +1,52 @@
 import { useForm } from "react-hook-form";
 import { FormContainer, Input } from "./styles";
 import { SubmitButton } from "../../../New-Workout/Main/styles";
+import axios from "axios";
+import { useContext } from "react";
+import { RegisterWorkoutContext } from "../../../../contexts/workoutContext";
+import { RegisterUserContext } from "../../../../contexts/userContext";
 
-interface ShareFormProps {
-  onSubmit: (email: string) => void;
+interface FormProps {
+  email: string;
+  message: string;
 }
 
-export function ShareForm({ onSubmit }: ShareFormProps) {
-  const { handleSubmit, register } = useForm<{ email: string }>();
+interface ShareFormProps {
+  onShareFormSubmit: () => void;
+}
 
-  const onSubmitForm = (data: { email: string }) => {
-    onSubmit(data.email);
+export function ShareForm({ onShareFormSubmit }: ShareFormProps) {
+  const { workout, workoutsIndex } = useContext(RegisterWorkoutContext);
+  const { user } = useContext(RegisterUserContext);
+
+  const { handleSubmit, register } = useForm<FormProps>();
+
+  const sendNotification = async (data: FormProps) => {
+    const message = data.message;
+    const userEmail = data.email;
+    const workoutId = workout[workoutsIndex].id;
+    const userName = user.name;
+    try {
+      const response = await axios.post("http://localhost:4000/notifications", {
+        workoutId,
+        userName,
+        userEmail,
+        message,
+      });
+      console.log(response);
+      onShareFormSubmit();
+    } catch (error) {
+      console.error("Erro ao enviar notificação:", error);
+      alert("Erro ao enviar notificação.");
+    }
   };
-  // const sendNotification = async () => {
-  //   if (!email || !workoutId) {
-  //     alert("Por favor, insira o e-mail e o ID do treino.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.post("http://localhost:4000/notifications", {
-  //       workoutId,
-  //       userEmail: email,
-  //       title,
-  //       message,
-  //     });
-  //     console.log("Notificação enviada:", response.data);
-  //     alert("Notificação enviada com sucesso!");
-  //   } catch (error) {
-  //     console.error("Erro ao enviar notificação:", error);
-  //     alert("Erro ao enviar notificação.");
-  //   }
-  // };
 
   return (
-    <FormContainer onSubmit={handleSubmit(onSubmitForm)}>
+    <FormContainer onSubmit={handleSubmit(sendNotification)}>
+      <Input
+        placeholder="mensagem"
+        {...register("message", { required: true })}
+      />
       <Input placeholder="email" {...register("email", { required: true })} />
       <SubmitButton type="submit">Salvar</SubmitButton>
     </FormContainer>

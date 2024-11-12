@@ -40,6 +40,14 @@ export const Container = styled(clickableBoxBase)`
       opacity: 1;
       pointer-events: auto;
     }
+    @media (max-width: 768px) {
+      ${baseButton} {
+        opacity: 1;
+      }
+      ${baseButtonNavLink} {
+        opacity: 1;
+      }
+    }
   `}
 `;
 

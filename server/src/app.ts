@@ -9,10 +9,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// app.use("/", (_, res) => {
-//   res.send("è os guri do grêmio ⚗️");
-// });
-
 app.use(workoutRoutes);
 app.use(notificationRoutes);
 app.use(userRoutes);

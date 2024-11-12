@@ -56,8 +56,9 @@ model Series {
 
 model Notification {
   id        Int      @id @default(autoincrement())
-  title     String
-  message   String
+  message   String   @default("false")
+  userName  String   @default("false")
+  email     String   @default("false")
   workoutId Int      @default(0)
   read      Boolean  @default(false)
   timestamp DateTime @default(now())

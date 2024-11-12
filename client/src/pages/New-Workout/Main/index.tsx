@@ -14,6 +14,7 @@ import {
   WorkoutBack,
   Group,
 } from "../../../@types";
+import { RegisterUserContext } from "../../../contexts/userContext";
 
 export function NewWorkout() {
   const {
@@ -26,6 +27,7 @@ export function NewWorkout() {
     setIsEditingWorkout,
     isEditingWorkout,
   } = useContext(RegisterWorkoutContext);
+  const { user } = useContext(RegisterUserContext);
 
   const isDisableSubmitButton: boolean = !group[0]?.exercisesProps[0]
     ? true
@@ -167,7 +169,7 @@ export function NewWorkout() {
   const handleSubmit = async (name: string) => {
     const data: Workout = { name, group, id: 0 };
     console.log(data);
-    const payload: WorkoutBack = convertWorkoutToBackFormat(data, 1); // Passar o userId correto
+    const payload: WorkoutBack = convertWorkoutToBackFormat(data, user.id);
     console.log("payload", payload);
     try {
       if (isEditingWorkout) {
@@ -275,7 +277,7 @@ export function NewWorkout() {
         </>
       ) : (
         <CreateNewWorkoutButton onClick={handleNewWorkout}>
-          CLIQUE AQUI PARA CRIAR UM NOVO TREINO
+          CRIAR UM NOVO TREINO
         </CreateNewWorkoutButton>
       )}
     </Container>

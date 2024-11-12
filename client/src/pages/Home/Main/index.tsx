@@ -14,7 +14,8 @@ import {
 import axios from "axios";
 import api from "../../../services/api";
 import { ShareForm } from "../components/ShareForm";
-// import { GeneratePDF } from "../components/generatePDF";
+import { GeneratePDF } from "../components/GeneratePDF";
+import { RegisterUserContext } from "../../../contexts/userContext";
 
 export function Home() {
   const {
@@ -25,6 +26,7 @@ export function Home() {
     setWorkoutsIndex,
     setIsEditingWorkout,
   } = useContext(RegisterWorkoutContext);
+  const { user } = useContext(RegisterUserContext);
 
   const [isSharing, setIsSharing] = useState(false);
 
@@ -62,14 +64,13 @@ export function Home() {
     openModal();
   }
 
-  function onShareFormSubmit(email: string) {
-    console.log(email);
+  function onShareFormSubmit() {
     closeModal();
   }
 
   useEffect(() => {
     api
-      .get("/workouts/1")
+      .get(`/workouts/${user.id}`)
       .then((response) => {
         if (response.data.length > 0) {
           const workoutsData = response.data.map((workout: WorkoutBack) => ({
@@ -100,7 +101,7 @@ export function Home() {
         }
       })
       .catch((error) => console.error("Erro ao buscar workout:", error));
-  }, [setWorkout]);
+  }, [setWorkout, user]);
 
   async function deleteWorkout(workoutId: number) {
     try {
@@ -110,8 +111,6 @@ export function Home() {
 
       setWorkout(workout.filter((w) => w.id !== workoutId));
 
-      // Alternar refresh para garantir que os dados estejam atualizados no banco
-
       console.log("Workout deleted successfully:", response.data);
     } catch (error) {
       console.error("Error deleting workout:", error);
@@ -120,7 +119,7 @@ export function Home() {
 
   function downloadWorkout(workoutsIndex: number) {
     setWorkoutsIndex(workoutsIndex);
-    // GeneratePDF();
+    GeneratePDF(workout, workoutsIndex);
   }
 
   return (
@@ -139,7 +138,7 @@ export function Home() {
       ))}
       <Modal isVisible={isModalVisible} onClose={closeModal}>
         {isSharing ? (
-          <ShareForm onSubmit={onShareFormSubmit} />
+          <ShareForm onShareFormSubmit={onShareFormSubmit} />
         ) : (
           <Table group={workoutToTable} workoutPageIndex={pageIndexToTable} />
         )}

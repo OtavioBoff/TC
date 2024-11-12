@@ -1,5 +1,10 @@
 export type WorkoutType = typeof group;
 
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 export interface Workout {
   id: number;
   name: string;
@@ -65,8 +70,10 @@ export interface UserBack {
 
 export interface Notification {
   id: number;
-  title: string;
+  userName: string;
   message: string;
   read: boolean;
+  workoutId: number;
+  email: string;
   timestamp?: Date;
 }

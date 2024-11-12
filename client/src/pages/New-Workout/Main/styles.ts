@@ -26,19 +26,18 @@ export const BaseButton = styled.button`
     align-items: center;
     text-align: center;
     margin: 4px;
-    border: 1px solid ${theme.gray300};
     border-radius: 8px;
     padding: 12px 24px;
     font-size: 1.5rem;
     font-weight: 500;
+    border: 1px solid ${theme.gray300};
     color: ${theme.gray300};
     cursor: pointer;
     transition: all 0.3s ease;
 
     &:hover {
-      background: ${theme.gray300};
-      color: ${theme.gray800};
-      border-color: ${theme.gray500};
+      color: ${theme.green500};
+      border-color: ${theme.green500};
     }
   `}
 `;
@@ -48,48 +47,29 @@ export const AddButton = styled(BaseButton)`
     background: transparent;
     color: ${theme.green500};
     border: 3px dashed ${theme.green700};
-
-    &:hover {
-      background: ${theme.green500};
-      color: ${theme.white};
-      border-color: ${theme.green700};
-    }
   `}
 `;
 
 export const SubmitButton = styled(BaseButton)`
   ${({ theme }) => css`
     background: transparent;
-    color: ${theme.gray300};
-    border: 1px solid ${theme.gray400};
-
-    &:hover {
-      background: ${theme.gray300};
-      color: ${theme.gray900};
-      border-color: ${theme.gray400};
-    }
 
     &:disabled {
       cursor: not-allowed;
+      background: transparent;
+      color: ${theme.gray500};
+      border-color: ${theme.gray500};
     }
   `}
 `;
 
 export const CreateNewWorkoutButton = styled(BaseButton)`
-  ${({ theme }) => css`
-    background: transparent;
-    color: ${theme.gray300};
-    font-size: 3rem;
-    font-weight: 700;
-    border: 3px dashed ${theme.green500};
+  ${() => css`
+    font-size: 2rem;
+    font-weight: 600;
     border-radius: 12px;
     padding: 10px 20px;
     transition: all 0.15s ease;
-    &:hover {
-      background: ${theme.green500};
-      color: ${theme.gray900};
-      border-color: ${theme.green500};
-    }
   `}
 `;
 

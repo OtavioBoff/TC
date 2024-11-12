@@ -3,7 +3,6 @@ import { Home } from "./pages/Home/Main/index";
 import { DefaultLayout } from "./layouts/DefaultLayout";
 import { LoginLayout } from "./layouts/LoginLayout";
 import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
 import { NewWorkout } from "./pages/New-Workout/Main";
 
 export function Router() {
@@ -15,7 +14,6 @@ export function Router() {
       </Route>
       <Route path="/" element={<LoginLayout />}>
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
       </Route>
     </Routes>
   );

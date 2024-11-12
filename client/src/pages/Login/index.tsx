@@ -14,6 +14,7 @@ export function Login() {
   };
   return (
     <Container>
+      <h1>Entrar</h1>
       {/* <form action="">
         <input type="email" placeholder="Email" />
         <input type="password" placeholder="Senha" />
@@ -32,10 +33,10 @@ export function Login() {
         </button>
       </Link> */}
       {/* <Test /> */}
-      <GoogleLogin
+      {/* <GoogleLogin
         onSuccess={handleLoginSuccess}
         onError={handleLoginFailure}
-      />
+      /> */}
     </Container>
   );
 }

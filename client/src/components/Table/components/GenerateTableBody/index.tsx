@@ -42,10 +42,8 @@ export function GenerateTableBody({
   const handleDragEnd = (result: DropResult) => {
     const { destination, source } = result;
 
-    // Verifica se houve uma mudança de posição
     if (!destination || destination.index === source.index) return;
 
-    // Realoca o exercício para a nova posição dentro do mesmo grupo
     const reorderedExercises = [...tableWorkout[tablePageIndex].exercisesProps];
     const [removed] = reorderedExercises.splice(source.index, 1);
     reorderedExercises.splice(destination.index, 0, removed);
