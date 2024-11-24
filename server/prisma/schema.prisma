@@ -23,6 +23,8 @@ model Workout {
 
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  notifications Notification[]
 }
 
 model Group {
@@ -59,9 +61,11 @@ model Notification {
   message   String   @default("false")
   userName  String   @default("false")
   email     String   @default("false")
-  workoutId Int      @default(0)
   read      Boolean  @default(false)
   timestamp DateTime @default(now())
+
+  workoutId Int
+  workout   Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
 
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)

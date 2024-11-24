@@ -62,6 +62,33 @@ export const getNotifications = async (req: Request, res: Response) => {
   }
 };
 
+export const updateNotificationsReadStatus = async (
+  req: Request,
+  res: Response
+) => {
+  const { userId } = req.params; // Recebe o ID do usuário
+
+  try {
+    const updatedNotifications = await prisma.notification.updateMany({
+      where: {
+        userId: Number(userId),
+        read: false, // Apenas atualiza as notificações não lidas
+      },
+      data: {
+        read: true,
+      },
+    });
+
+    res.json({
+      message: "Notifications updated successfully",
+      updatedNotifications,
+    });
+  } catch (error) {
+    console.error("Error updating notifications:", error);
+    res.status(500).json({ error: "Error updating notifications" });
+  }
+};
+
 export const copyWorkoutToUser = async (req: Request, res: Response) => {
   const { workoutId, email } = req.body;
 

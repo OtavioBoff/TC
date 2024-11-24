@@ -25,6 +25,7 @@ export function Home() {
     setPageIndex,
     setWorkoutsIndex,
     setIsEditingWorkout,
+    refresh,
   } = useContext(RegisterWorkoutContext);
   const { user } = useContext(RegisterUserContext);
 
@@ -101,7 +102,7 @@ export function Home() {
         }
       })
       .catch((error) => console.error("Erro ao buscar workout:", error));
-  }, [setWorkout, user]);
+  }, [setWorkout, user, refresh]);
 
   async function deleteWorkout(workoutId: number) {
     try {

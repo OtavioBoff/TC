@@ -16,6 +16,9 @@ type RegisterWorkoutContextData = {
 
   isEditingWorkout: boolean;
   setIsEditingWorkout: (data: boolean) => void;
+
+  refresh: boolean;
+  setRefresh: (data: boolean) => void;
 };
 
 export const RegisterWorkoutContext = createContext<RegisterWorkoutContextData>(

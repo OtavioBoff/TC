@@ -1,42 +1,48 @@
-// import Test from "../../test";
-import { Container } from "./styles";
-// import { Link } from "react-router-dom";
+// import { Container } from "./styles";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { Container } from "./styles";
+// import { useGoogleLogin } from "@react-oauth/google";
+// import { FcGoogle } from "react-icons/fc";
 
 export function Login() {
+  // const login = useGoogleLogin({
+  //   onSuccess: (tokenResponse) => console.log(tokenResponse),
+  //   onError: () => console.error("Login falhou"),
+  // });
+
   const handleLoginSuccess = (response: CredentialResponse) => {
-    console.log(response);
-    // Acesse response.credential para obter o token
+    // Envie o token para o back-end
+    fetch("http://localhost:4000/auth/google", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: response.credential }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Login bem-sucedido:", data);
+      })
+      .catch((err) => console.error("Erro no login:", err));
   };
 
-  const handleLoginFailure = () => {
-    console.error("Login falhou");
-  };
   return (
     <Container>
       <h1>Entrar</h1>
-      {/* <form action="">
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Senha" />
-        <Link to="/login" title="Entrar">
-          <button type="submit">Entrar</button>
-        </Link>
-      </form>
-      <Link to="/register" title="Registrar">
-        <button>
-          <span>Registrar</span>
-        </button>
-      </Link>
-      <Link to="/" title="home">
-        <button>
-          <span>Convidado</span>
-        </button>
-      </Link> */}
-      {/* <Test /> */}
-      {/* <GoogleLogin
+      {/* <GoogleButton onClick={() => login()}>
+        <FcGoogle size={24} />
+        Fazer login com o Google
+      </GoogleButton> */}
+      <GoogleLogin
         onSuccess={handleLoginSuccess}
-        onError={handleLoginFailure}
-      /> */}
+        onError={() => console.error("Erro no login")}
+      />
     </Container>
   );
 }
+// export function Login() {
+
+//   return (
+//     <Container>
+//       <h1>Entrar</h1>
+//     </Container>
+//   );
+// }

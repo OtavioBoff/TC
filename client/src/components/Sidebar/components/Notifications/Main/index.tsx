@@ -13,7 +13,7 @@ type NotificationProps = {
 export function Notifications({ notifications }: NotificationProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const hasUnread = notifications.some((n) => !n.read);
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   const closeModal = () => setIsModalVisible(false);
 
@@ -21,7 +21,7 @@ export function Notifications({ notifications }: NotificationProps) {
     <div style={{ position: "relative" }}>
       <NotificationButton onClick={() => setIsModalVisible(!isModalVisible)}>
         <FaBell size={24} />
-        {hasUnread && <span>{notifications.length}</span>}
+        {unreadCount > 0 && <span>{unreadCount}</span>}
       </NotificationButton>
       <NotificationModal
         isModalVisible={isModalVisible}

@@ -1,15 +1,20 @@
 import axios from "axios";
 import { Notification } from "../../../../../../@types";
 import { AddWorkoutButton, Content } from "./styles";
+import { useContext, useEffect } from "react";
+import { RegisterWorkoutContext } from "../../../../../../contexts/workoutContext";
+import { RegisterUserContext } from "../../../../../../contexts/userContext";
 type NotificationListProps = {
   notifications: Notification[];
 };
 
 export function NotificationList({ notifications }: NotificationListProps) {
+  const { refresh, setRefresh } = useContext(RegisterWorkoutContext);
+  const { user } = useContext(RegisterUserContext);
   const copyWorkout = async (data: Notification) => {
     const workoutId = data.workoutId;
     const email = data.email;
-
+    setRefresh(!refresh);
     console.log(data);
 
     try {
@@ -22,6 +27,18 @@ export function NotificationList({ notifications }: NotificationListProps) {
       console.error("Erro ao copiar workout:", error);
     }
   };
+
+  useEffect(() => {
+    const markNotificationsAsRead = async () => {
+      try {
+        await axios.put(`http://localhost:4000/notifications/${user.id}/read`);
+        console.log("Notificações atualizadas para lidas");
+      } catch (error) {
+        console.error("Erro ao atualizar notificações", error);
+      }
+    };
+    markNotificationsAsRead();
+  }, [user.id]);
 
   return (
     <div style={{ padding: "10px" }}>

@@ -50,7 +50,7 @@ export function ExerciseForm({
       : 1;
 
   const generateToRepsAndWeight = (numberOfSeries: number) => {
-    if (seriesCount > 12) numberOfSeries = 12;
+    if (seriesCount > 8) numberOfSeries = 8;
     return Array.from({ length: numberOfSeries }).map((_, index) => {
       return (
         <div key={index} style={{ display: "flex", gap: "10px" }}>
@@ -139,7 +139,7 @@ export function ExerciseForm({
               id="series"
               type="number"
               min={1}
-              max={12}
+              max={8}
               {...register("exerciseProps.seriesProps.num", {
                 valueAsNumber: true,
               })}
