@@ -11,10 +11,13 @@ export const Container = styled.header`
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
-    padding: 5rem 0;
+    padding: 3rem 0;
 
     & h1 {
-      color: ${theme.white};
+      color: ${theme.green500};
+    }
+    & span {
+      color: ${theme.gray500};
     }
   `}
 `;

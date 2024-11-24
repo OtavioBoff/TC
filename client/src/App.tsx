@@ -10,17 +10,7 @@ import { RegisterUserContext } from "./contexts/userContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export function App() {
-  const testUser = {
-    id: 2,
-    name: "joao",
-    email: "joaofazedor@gmail.com",
-  };
-  // {
-  //   id: 1,
-  //   name: "john",
-  //   email: "johndoe@gmail.com",
-  // };
-  const [user, setUser] = useState<User>(testUser);
+  const [user, setUser] = useState<User | null>(null);
   const [group, setGroup] = useState<Group[]>([]);
   const [workout, setWorkout] = useState<Workout[]>([]);
   const [pageIndex, setPageIndex] = useState<number>(0);

@@ -15,6 +15,7 @@ import {
   Group,
 } from "../../../@types";
 import { RegisterUserContext } from "../../../contexts/userContext";
+import { useNavigate } from "react-router-dom";
 
 export function NewWorkout() {
   const {
@@ -28,6 +29,11 @@ export function NewWorkout() {
     isEditingWorkout,
   } = useContext(RegisterWorkoutContext);
   const { user } = useContext(RegisterUserContext);
+
+  const navigate = useNavigate();
+  if (!user) {
+    navigate("/login");
+  }
 
   const isDisableSubmitButton: boolean = !group[0]?.exercisesProps[0]
     ? true
@@ -132,7 +138,7 @@ export function NewWorkout() {
 
   const convertWorkoutToBackFormat = (
     workoutToBack: Workout,
-    userId: number
+    userId: number = 0
   ): WorkoutBack => {
     const groups: GroupBack[] = workoutToBack.group.map((groupItem) => ({
       id: groupItem.id,
@@ -169,7 +175,7 @@ export function NewWorkout() {
   const handleSubmit = async (name: string) => {
     const data: Workout = { name, group, id: 0 };
     console.log(data);
-    const payload: WorkoutBack = convertWorkoutToBackFormat(data, user.id);
+    const payload: WorkoutBack = convertWorkoutToBackFormat(data, user?.id);
     console.log("payload", payload);
     try {
       if (isEditingWorkout) {

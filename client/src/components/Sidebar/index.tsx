@@ -14,7 +14,7 @@ export function Sidebar() {
   const fetchNotifications = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/notifications/${user.id}`
+        `http://localhost:4000/notifications/${user?.id}`
       );
       setNotifications(response.data);
     } catch (error) {
@@ -29,7 +29,7 @@ export function Sidebar() {
     <SidebarContainer>
       <nav></nav>
       <nav>
-        <NavLink to="/create" title="NewWorkout">
+        <NavLink to="/create" title="Criar Treino">
           <PiWrench size={32} />
         </NavLink>
 
@@ -37,7 +37,7 @@ export function Sidebar() {
           <PiBarbell size={32} />
         </NavLink>
 
-        <NavLink to="/login" title="logout">
+        <NavLink to="/login" title="Sair">
           <PiSignOut size={32} />
         </NavLink>
       </nav>

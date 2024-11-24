@@ -1,4 +1,4 @@
-import { Container } from "./styles";
+import { Container, WithoutWorkout } from "./styles";
 import { WorkoutBox } from "../components/WorkoutBox";
 import { RegisterWorkoutContext } from "../../../contexts/workoutContext";
 import { useContext, useEffect, useState } from "react";
@@ -16,6 +16,8 @@ import api from "../../../services/api";
 import { ShareForm } from "../components/ShareForm";
 import { GeneratePDF } from "../components/GeneratePDF";
 import { RegisterUserContext } from "../../../contexts/userContext";
+import { useNavigate } from "react-router-dom";
+import { PiWrench } from "react-icons/pi";
 
 export function Home() {
   const {
@@ -28,7 +30,12 @@ export function Home() {
     refresh,
   } = useContext(RegisterWorkoutContext);
   const { user } = useContext(RegisterUserContext);
-
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
   const [isSharing, setIsSharing] = useState(false);
 
   const [workoutToTable, setWorkoutToTable] = useState<Group[]>([]);
@@ -71,7 +78,7 @@ export function Home() {
 
   useEffect(() => {
     api
-      .get(`/workouts/${user.id}`)
+      .get(`/workouts/${user?.id}`)
       .then((response) => {
         if (response.data.length > 0) {
           const workoutsData = response.data.map((workout: WorkoutBack) => ({
@@ -125,18 +132,26 @@ export function Home() {
 
   return (
     <Container>
-      {workout.map((_, index) => (
-        <WorkoutBox
-          key={index}
-          workoutsIndex={index}
-          openWorkout={openWorkout}
-          openWorkoutToEdit={openWorkoutToEdit}
-          deleteWorkout={deleteWorkout}
-          copyWorkout={copyWorkout}
-          downloadWorkout={downloadWorkout}
-          shareWorkout={shareWorkout}
-        />
-      ))}
+      {workout.length > 0 ? (
+        workout.map((_, index) => (
+          <WorkoutBox
+            key={index}
+            workoutsIndex={index}
+            openWorkout={openWorkout}
+            openWorkoutToEdit={openWorkoutToEdit}
+            deleteWorkout={deleteWorkout}
+            copyWorkout={copyWorkout}
+            downloadWorkout={downloadWorkout}
+            shareWorkout={shareWorkout}
+          />
+        ))
+      ) : (
+        <WithoutWorkout>
+          <p>Você ainda não possui treinos cadastrados. Clique no botão "</p>
+          <PiWrench size={24} />
+          <p>" para começar!</p>
+        </WithoutWorkout>
+      )}
       <Modal isVisible={isModalVisible} onClose={closeModal}>
         {isSharing ? (
           <ShareForm onShareFormSubmit={onShareFormSubmit} />
